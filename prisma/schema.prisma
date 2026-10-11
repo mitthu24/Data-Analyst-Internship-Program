@@ -1,8 +1,7 @@
-// Phase 2 schema: mirrors the Phase 1 static content shapes in src/lib/content/*.
-// Not yet connected to a live database — see .env.example. Public pages in Phase 1
-// render from the static content modules, independent of this schema, so the
-// Founder Admin Panel (Phase 2) can later move the same shapes into Postgres
-// without changing how pages consume them.
+// Phase 2 schema: the live database backing the Founder Admin Panel.
+// Public pages read published rows through src/lib/content/* (with static
+// fallbacks when the database is unavailable); the admin panel under
+// /founder reads and writes everything, including drafts.
 
 generator client {
   provider = "prisma-client-js"
@@ -13,8 +12,73 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum PublishStatus {
+  DRAFT
+  PUBLISHED
+}
+
+// ───────────────────────── Auth & security ─────────────────────────
+
+model Founder {
+  id                  String    @id @default(cuid())
+  email               String    @unique
+  passwordHash        String
+  mustChangePassword  Boolean   @default(true)
+  failedLoginAttempts Int       @default(0)
+  lockedUntil         DateTime?
+  lastLoginAt         DateTime?
+  passwordChangedAt   DateTime  @default(now())
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  sessions    Session[]
+  auditEvents AuditEvent[]
+  leadNotes   LeadNote[]
+}
+
+model Session {
+  id        String    @id @default(cuid())
+  founderId String
+  founder   Founder   @relation(fields: [founderId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique
+  userAgent String?
+  ip        String?
+  createdAt DateTime  @default(now())
+  expiresAt DateTime
+  revokedAt DateTime?
+
+  @@index([founderId])
+}
+
+model AuditEvent {
+  id        String   @id @default(cuid())
+  founderId String?
+  founder   Founder? @relation(fields: [founderId], references: [id], onDelete: SetNull)
+  action    String
+  detail    Json?
+  ip        String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([founderId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+// ───────────────────────── General site content ─────────────────────────
+
+/// Generic key/value content blocks (hero copy, CTA labels, about/career
+/// guidance text, footer text, announcement banner, per-page SEO, etc).
+/// Keys and their expected JSON shape are defined in src/lib/content/schema.ts.
+model ContentEntry {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+  updatedBy String?
+}
+
 model Settings {
-  id                   String   @id @default(cuid())
+  id                   String   @id @default("singleton")
   programName          String   @default("Data Analyst Internship Program")
   durationLabel        String   @default("One week")
   classDurationMinutes Int      @default(90)
@@ -22,14 +86,24 @@ model Settings {
   mentorSessions       Int      @default(4)
   totalSessions        Int      @default(25)
   totalHours           Float    @default(37.5)
+  currency             String   @default("INR")
   referencePriceInr    Int      @default(19999)
   launchPriceInr       Int      @default(1999)
   enrollmentPaymentInr Int      @default(499)
   enrollmentUrl        String   @default("https://superprofile.bio/vp/data-analyst-internship-program")
   refundWindowDays     Int      @default(7)
+  refundPolicyText     String   @default("")
   scheduleNote         String   @default("The daily timetable for this batch is shared by the organizer closer to the start date.")
+  batchDates           String?
+  batchTiming          String?
+  batchMode            String?
+  batchVenue           String?
+  contactEmail         String?
+  contactPhone         String?
   updatedAt            DateTime @updatedAt
 }
+
+// ───────────────────────── Curriculum ─────────────────────────
 
 enum SessionModule {
   EXCEL
@@ -42,38 +116,52 @@ enum SessionModule {
 }
 
 model CurriculumSession {
-  id              String        @id @default(cuid())
-  classNumber     Int           @unique
-  module          SessionModule
-  title           String
-  durationMinutes Int           @default(90)
-  topics          String[]
-  practicalExample String
-  handsOnExercise String
-  learningOutcome String
-  deliverable     String
-  tools           String[]
-  mentorName      String?
-  mentorTitle     String?
-  isEditableByFounder Boolean   @default(false)
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  id                  String        @id @default(cuid())
+  classNumber         Int           @unique
+  module              SessionModule
+  title               String
+  durationMinutes     Int           @default(90)
+  topics              String[]
+  practicalExample    String
+  handsOnExercise     String
+  learningOutcome     String
+  deliverable         String
+  tools               String[]
+  trainerId           String?
+  trainer             Trainer?      @relation(fields: [trainerId], references: [id], onDelete: SetNull)
+  mentorName          String?
+  mentorTitle         String?
+  order               Int           @default(0)
+  status              PublishStatus @default(PUBLISHED)
+  isEditableByFounder Boolean       @default(false)
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  @@index([status])
 }
 
+// ───────────────────────── Trainers & mentors ─────────────────────────
+
 model Trainer {
-  id        String   @id @default(cuid())
-  name      String
-  role      String
-  company   String?
-  location  String?
-  bio       String?
-  photoUrl  String?
-  linkedin  String?
-  isMentor  Boolean  @default(false)
-  sortOrder Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String        @id @default(cuid())
+  name       String
+  role       String
+  company    String?
+  location   String?
+  bio        String?
+  expertise  String[]
+  photoUrl   String?
+  linkedin   String?
+  isMentor   Boolean       @default(false)
+  sortOrder  Int           @default(0)
+  status     PublishStatus @default(PUBLISHED)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  sessions CurriculumSession[]
 }
+
+// ───────────────────────── Projects ─────────────────────────
 
 enum ProjectDifficulty {
   BEGINNER
@@ -82,44 +170,124 @@ enum ProjectDifficulty {
 }
 
 model Project {
-  id              String            @id @default(cuid())
-  title           String
-  businessProblem String
-  tools           String[]
+  id                 String            @id @default(cuid())
+  slug               String            @unique
+  title              String
+  businessProblem    String
+  tools              String[]
   learningObjectives String[]
-  deliverables    String[]
-  difficulty      ProjectDifficulty @default(BEGINNER)
-  isPlannedExample Boolean          @default(true)
-  demoUrl         String?
-  githubUrl       String?
-  sortOrder       Int               @default(0)
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
+  deliverables       String[]
+  difficulty         ProjectDifficulty @default(BEGINNER)
+  isPlannedExample   Boolean           @default(true)
+  imageUrl           String?
+  demoUrl            String?
+  githubUrl          String?
+  sortOrder          Int               @default(0)
+  status             PublishStatus     @default(PUBLISHED)
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
 }
 
-model Faq {
-  id        String   @id @default(cuid())
-  question  String
-  answer    String
-  sortOrder Int      @default(0)
-}
+// ───────────────────────── Testimonials & gallery ─────────────────────────
 
 model Testimonial {
-  id          String   @id @default(cuid())
+  id          String        @id @default(cuid())
   studentName String
-  quote       String
   role        String?
-  isApproved  Boolean  @default(false)
-  createdAt   DateTime @default(now())
+  quote       String
+  imageUrl    String?
+  consent     Boolean       @default(false)
+  sortOrder   Int           @default(0)
+  status      PublishStatus @default(DRAFT)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model GalleryItem {
+  id        String        @id @default(cuid())
+  imageUrl  String
+  caption   String?
+  altText   String
+  category  String?
+  sortOrder Int           @default(0)
+  status    PublishStatus @default(DRAFT)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+// ───────────────────────── FAQ ─────────────────────────
+
+model Faq {
+  id        String        @id @default(cuid())
+  question  String
+  answer    String
+  sortOrder Int           @default(0)
+  status    PublishStatus @default(PUBLISHED)
+}
+
+// ───────────────────────── Leads ─────────────────────────
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  FOLLOW_UP
+  ENROLLED
+  CLOSED
+}
+
+enum LeadProfile {
+  STUDENT
+  FRESHER
+  WORKING_PROFESSIONAL
+  OTHER
+}
+
+enum SheetsSyncStatus {
+  DISABLED
+  PENDING
+  SYNCED
+  FAILED
 }
 
 model Lead {
+  id              String           @id @default(cuid())
+  name            String
+  email           String
+  phone           String?
+  specialization  String?
+  profile         LeadProfile?
+  message         String?
+  consent         Boolean          @default(false)
+  source          String           @default("website")
+  ip              String?
+  status          LeadStatus       @default(NEW)
+  isDuplicateOfId String?
+  isDuplicateOf   Lead?            @relation("LeadDuplicates", fields: [isDuplicateOfId], references: [id], onDelete: SetNull)
+  duplicates      Lead[]           @relation("LeadDuplicates")
+
+  sheetsSyncStatus   SheetsSyncStatus @default(PENDING)
+  sheetsSyncAttempts Int              @default(0)
+  sheetsLastAttemptAt DateTime?
+  sheetsLastError    String?
+  sheetsSyncedAt      DateTime?
+
+  notes     LeadNote[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@index([status])
+  @@index([email])
+  @@index([createdAt])
+}
+
+model LeadNote {
   id        String   @id @default(cuid())
-  name      String
-  email     String
-  phone     String?
-  message   String?
-  source    String   @default("website")
-  syncedToSheets Boolean @default(false)
+  leadId    String
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  note      String
+  createdById String?
+  createdBy   Founder? @relation(fields: [createdById], references: [id], onDelete: SetNull)
   createdAt DateTime @default(now())
+
+  @@index([leadId])
 }
