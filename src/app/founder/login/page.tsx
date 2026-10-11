@@ -15,7 +15,7 @@ export default async function FounderLoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-navy-950 px-4 py-8">
+    <div className="flex items-center justify-center bg-navy-950 px-4 py-12 sm:py-16">
       <div className="w-full max-w-sm">
         <div className="mb-5 text-center">
           <span className="mx-auto mb-2 flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-electric-500">

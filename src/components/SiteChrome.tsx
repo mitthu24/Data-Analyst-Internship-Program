@@ -4,14 +4,17 @@ import { usePathname } from "next/navigation";
 
 /**
  * Decides whether the public Navbar/Footer/announcement banner wrap the
- * current page. The founder admin area (/founder/*) is its own self-
- * contained app shell (a full-screen login card, or the Sidebar-driven CMS
- * layout) — it was previously always nested inside the public chrome via
- * the single root layout, which added a full marketing navbar and a long
- * multi-column footer above and below every founder page, including the
- * login screen. That's the main cause of "excessive vertical space" on
- * /founder/login: the login card itself was never oversized, it was just
- * sandwiched between unrelated public-site chrome.
+ * current page.
+ *
+ * `/founder/login` is a public-facing page (anyone can reach it, logged in
+ * or not) and keeps the public header/footer, matching the rest of the
+ * site and giving a logged-out visitor normal navigation — it's just kept
+ * visually compact so the header/footer don't dominate the page.
+ *
+ * Everything else under `/founder/*` is the authenticated CMS — its own
+ * self-contained app shell (the Sidebar-driven layout), deliberately kept
+ * free of public marketing navigation so the admin UI doesn't compete with
+ * (or let an admin accidentally click into) the public site chrome.
  */
 export function SiteChrome({
   announcementBanner,
@@ -25,9 +28,9 @@ export function SiteChrome({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const isFounderRoute = pathname?.startsWith("/founder") ?? false;
+  const isFounderAppRoute = (pathname?.startsWith("/founder") ?? false) && pathname !== "/founder/login";
 
-  if (isFounderRoute) {
+  if (isFounderAppRoute) {
     return <>{children}</>;
   }
 

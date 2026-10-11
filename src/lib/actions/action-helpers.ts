@@ -36,6 +36,12 @@ export async function safeAction(fn: () => Promise<FormState>): Promise<FormStat
     if (err instanceof Error && err.message === "DATABASE_UNAVAILABLE") {
       return { error: "The database is temporarily unavailable. Please try again in a moment." };
     }
+    if (err instanceof Error && err.message === "DATABASE_SCHEMA_MISMATCH") {
+      return { error: "The database schema is out of date. Ask the site administrator to run pending migrations." };
+    }
+    if (err instanceof Error && err.message === "DATABASE_ERROR") {
+      return { error: "A database error occurred. Please try again — if this continues, contact the site administrator." };
+    }
 
     console.error("[founder-action] unexpected error:", err);
     return { error: "Something went wrong. Please try again." };

@@ -37,6 +37,20 @@ describe("safeAction", () => {
     expect(result.error).toMatch(/temporarily unavailable/i);
   });
 
+  it("maps DATABASE_SCHEMA_MISMATCH to a message pointing at pending migrations", async () => {
+    const result = await safeAction(async () => {
+      throw new Error("DATABASE_SCHEMA_MISMATCH");
+    });
+    expect(result.error).toMatch(/schema is out of date/i);
+  });
+
+  it("maps DATABASE_ERROR to a distinct database-error message", async () => {
+    const result = await safeAction(async () => {
+      throw new Error("DATABASE_ERROR");
+    });
+    expect(result.error).toMatch(/database error occurred/i);
+  });
+
   it("maps any other error to a generic message, never leaking the raw error", async () => {
     const result = await safeAction(async () => {
       throw new Error("connection refused at postgresql://user:secret@host:5432/db");
