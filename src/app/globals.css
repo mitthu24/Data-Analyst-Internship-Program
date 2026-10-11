@@ -24,6 +24,16 @@ body {
     animation: gradShift 4s ease infinite;
   }
 
+  /* Green-to-teal gradient for the hero's "Job-Ready Data Analyst" highlight. */
+  .text-gradient-hero {
+    background-image: linear-gradient(90deg, #34d399, #2dd4bf, #34d399);
+    background-size: 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradShift 6s ease infinite;
+  }
+
   .bg-grid-overlay {
     background-image:
       linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
@@ -67,6 +77,14 @@ body {
 
 .animate-ticker:hover {
   animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .text-gradient-lime,
+  .text-gradient-hero,
+  .animate-ticker {
+    animation: none;
+  }
 }
 
 /* ── Print: brochure only ── */

@@ -4,7 +4,7 @@ import { EnrollButton } from "@/components/EnrollButton";
 import { PriceCard } from "@/components/PriceCard";
 import { KpiCard } from "@/components/KpiCard";
 import { SkillTicker } from "@/components/SkillTicker";
-import { CurriculumModulePreview } from "@/components/CurriculumModulePreview";
+import { CurriculumModuleGrid } from "@/components/CurriculumModuleGrid";
 import { ProjectCard } from "@/components/ProjectCard";
 import { TrainerCard } from "@/components/TrainerCard";
 import { MentorCard } from "@/components/MentorCard";
@@ -24,6 +24,24 @@ const audiences = [
   { icon: "💼", title: "Freshers & Job Seekers", desc: "Stand out with real analytics projects and tool fluency." },
   { icon: "👔", title: "Working Professionals", desc: "Add practical analytics skills alongside your current role." },
 ];
+
+const HERO_HIGHLIGHT_PHRASE = "Job-Ready Data Analyst";
+
+/** Wraps the "Job-Ready Data Analyst" phrase in the hero title with the animated gradient style, if present. */
+function renderHeroTitle(title: string) {
+  const index = title.toLowerCase().indexOf(HERO_HIGHLIGHT_PHRASE.toLowerCase());
+  if (index === -1) return title;
+  const before = title.slice(0, index);
+  const match = title.slice(index, index + HERO_HIGHLIGHT_PHRASE.length);
+  const after = title.slice(index + HERO_HIGHLIGHT_PHRASE.length);
+  return (
+    <>
+      {before}
+      <span className="text-gradient-hero">{match}</span>
+      {after}
+    </>
+  );
+}
 
 const careerPaths = [
   { icon: "📊", title: "Data Analyst", desc: "Entry-level analytics roles across industries." },
@@ -48,15 +66,15 @@ export default async function HomePage() {
   return (
     <>
       {/* HERO */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 py-14 text-white sm:py-20">
+      <section className="relative overflow-hidden bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 py-8 text-white sm:py-10 lg:py-12">
         <div className="absolute inset-0 bg-grid-overlay opacity-40 [mask-image:linear-gradient(135deg,rgba(0,0,0,.6),transparent_65%)]" />
         <div className="absolute -right-24 -top-24 h-96 w-96 rounded-full bg-electric-500/20 blur-3xl" />
         <div className="absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-emerald-500/20 blur-3xl" />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
+          <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
             <div>
-              <div className="mb-4 flex flex-wrap gap-2">
+              <div className="mb-3 flex flex-wrap gap-2">
                 <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-bold backdrop-blur-sm">
                   📅 {settings.durationLabel} Program
                 </span>
@@ -68,17 +86,17 @@ export default async function HomePage() {
                 </span>
               </div>
               <h1 className="text-4xl font-black leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
-                {hero.title}
+                {renderHeroTitle(hero.title)}
               </h1>
-              <p className="mt-4 max-w-xl text-lg font-medium text-white/75">{hero.description}</p>
-              <div className="mt-6 flex flex-wrap gap-4">
+              <p className="mt-3 max-w-xl text-lg font-medium text-white/75">{hero.description}</p>
+              <div className="mt-5 flex flex-wrap gap-4">
                 <EnrollButton enrollmentUrl={settings.enrollmentUrl} label={hero.ctaLabel} />
                 <ButtonLink href="/curriculum" variant="ghost">
                   {hero.secondaryCtaLabel}
                 </ButtonLink>
               </div>
 
-              <div className="mt-8 grid grid-cols-3 gap-3 sm:max-w-md">
+              <div className="mt-6 grid grid-cols-3 gap-3 sm:max-w-md">
                 <KpiCard value={`${settings.totalSessions}`} label="Total Sessions" />
                 <KpiCard value={`${settings.totalHours}`} label="Instructional Hours" />
                 <KpiCard value={`${settings.mentorSessions}`} label="Corporate Mentors" />
@@ -130,13 +148,13 @@ export default async function HomePage() {
       <Section className="bg-slate-50">
         <SectionHeading
           eyebrow="Curriculum"
-          title={`All ${settings.totalSessions} Sessions, 90 Minutes Each`}
-          description={`${settings.coreClasses} core classes plus ${settings.mentorSessions} corporate expert mentoring sessions — ${settings.totalHours} instructional hours in total.`}
+          title="Explore the Curriculum"
+          description={`${settings.totalSessions} sessions across 7 modules — ${settings.coreClasses} core classes plus ${settings.mentorSessions} corporate expert mentoring sessions — ${settings.totalHours} instructional hours in total.`}
         />
-        <CurriculumModulePreview curriculum={curriculum} />
+        <CurriculumModuleGrid curriculum={curriculum} />
         <div className="mt-8 text-center">
           <ButtonLink href="/curriculum" variant="secondary">
-            See All {settings.totalSessions} Sessions →
+            View Full Curriculum →
           </ButtonLink>
         </div>
       </Section>
