@@ -1,0 +1,15 @@
+export const founderNav = [
+  { label: "Dashboard", href: "/founder", icon: "📊" },
+  { label: "Website Content", href: "/founder/content", icon: "🏠" },
+  { label: "Curriculum", href: "/founder/curriculum", icon: "📚" },
+  { label: "Trainers", href: "/founder/trainers", icon: "🧑‍🏫" },
+  { label: "Corporate Mentors", href: "/founder/mentors", icon: "🤝" },
+  { label: "Projects", href: "/founder/projects", icon: "💼" },
+  { label: "Testimonials", href: "/founder/testimonials", icon: "💬" },
+  { label: "Gallery", href: "/founder/gallery", icon: "📷" },
+  { label: "Brochure", href: "/founder/brochure", icon: "📄" },
+  { label: "Pricing", href: "/founder/pricing", icon: "💰" },
+  { label: "Leads", href: "/founder/leads", icon: "📥" },
+  { label: "Settings", href: "/founder/settings", icon: "⚙️" },
+  { label: "Security", href: "/founder/security", icon: "🔒" },
+] as const;
