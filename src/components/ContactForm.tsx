@@ -14,11 +14,17 @@ export function ContactForm() {
     setError(null);
 
     const form = event.currentTarget;
+    const fd = new FormData(form);
     const data = {
-      name: (form.elements.namedItem("name") as HTMLInputElement).value,
-      email: (form.elements.namedItem("email") as HTMLInputElement).value,
-      phone: (form.elements.namedItem("phone") as HTMLInputElement).value,
-      message: (form.elements.namedItem("message") as HTMLTextAreaElement).value,
+      name: fd.get("name"),
+      email: fd.get("email"),
+      phone: fd.get("phone"),
+      specialization: fd.get("specialization"),
+      profile: fd.get("profile") || undefined,
+      message: fd.get("message"),
+      consent: fd.get("consent") === "on",
+      // Honeypot field — left blank by real visitors, filled by most bots.
+      website: fd.get("website"),
     };
 
     try {
@@ -78,6 +84,34 @@ export function ContactForm() {
         />
       </div>
       <div>
+        <label htmlFor="specialization" className="mb-1 block text-sm font-bold text-navy-900">
+          Education / MBA specialization
+        </label>
+        <input
+          id="specialization"
+          name="specialization"
+          type="text"
+          placeholder="e.g. MBA Finance, B.Com, B.Tech"
+          className="w-full rounded-lg border border-slate-300 px-4 py-2.5 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+        />
+      </div>
+      <div>
+        <label htmlFor="profile" className="mb-1 block text-sm font-bold text-navy-900">
+          You are a...
+        </label>
+        <select
+          id="profile"
+          name="profile"
+          className="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+        >
+          <option value="">Prefer not to say</option>
+          <option value="STUDENT">Student</option>
+          <option value="FRESHER">Fresher</option>
+          <option value="WORKING_PROFESSIONAL">Working Professional</option>
+          <option value="OTHER">Other</option>
+        </select>
+      </div>
+      <div>
         <label htmlFor="message" className="mb-1 block text-sm font-bold text-navy-900">
           Message (optional)
         </label>
@@ -88,6 +122,22 @@ export function ContactForm() {
           className="w-full rounded-lg border border-slate-300 px-4 py-2.5 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
         />
       </div>
+
+      {/* Honeypot: hidden from real users via CSS, so only bots fill it in. */}
+      <div className="absolute left-[-9999px]" aria-hidden="true">
+        <label htmlFor="website">Website</label>
+        <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+      </div>
+
+      <label className="flex items-start gap-2 text-xs font-medium text-slate-600">
+        <input id="consent" name="consent" type="checkbox" required className="mt-0.5" />
+        I consent to being contacted about this program and to the processing of the information above as
+        described in the{" "}
+        <a href="/privacy-policy" className="font-semibold text-emerald-600">
+          Privacy Policy
+        </a>
+        .
+      </label>
 
       {error && <p className="text-sm font-semibold text-rose-600">{error}</p>}
 
