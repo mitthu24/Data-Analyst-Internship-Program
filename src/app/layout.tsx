@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { AnnouncementBanner } from "@/components/AnnouncementBanner";
+import { SiteChrome } from "@/components/SiteChrome";
 import { getSettings } from "@/lib/content/settings";
 import { getAnnouncementBanner } from "@/lib/content/site-content";
 import "./globals.css";
@@ -27,10 +28,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en" className={inter.variable}>
       <body className="flex min-h-screen flex-col bg-white font-sans text-navy-900 antialiased">
-        <AnnouncementBanner banner={banner} />
-        <Navbar enrollmentUrl={settings.enrollmentUrl} />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <SiteChrome
+          announcementBanner={<AnnouncementBanner banner={banner} />}
+          navbar={<Navbar enrollmentUrl={settings.enrollmentUrl} />}
+          footer={<Footer />}
+        >
+          {children}
+        </SiteChrome>
       </body>
     </html>
   );

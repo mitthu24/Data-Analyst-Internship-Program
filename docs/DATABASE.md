@@ -103,6 +103,40 @@ against a database with real data — both are destructive.
 6. Redeploy (or just visit the site) — public pages will immediately start
    reading from the real database.
 
+## Serverless connection limits (read this if `/founder/login` or the
+## dashboard intermittently errors, and a refresh fixes it)
+
+This is the classic Vercel-serverless-functions + plain-Postgres symptom:
+every concurrent function invocation can open its own database connection,
+and a direct (non-pooled) Postgres connection string has a low
+`max_connections` ceiling — Railway's free/hobby tier included. Once that
+ceiling is hit, new connections fail until one frees up, which shows up as
+an intermittent error that a refresh often "fixes" (a different, already-
+connected instance serves it, or a connection has since freed).
+
+The code-level fix already in place (as of this fix) is that a failed
+database connection during session verification now surfaces as a clear
+"temporarily unavailable, try again" message via `src/app/founder/error.tsx`
+instead of Next's generic error page — so the failure mode is no longer
+confusing, but the underlying connection pressure is still an infrastructure
+setting, not something code alone can fix. To actually reduce how often it
+happens:
+
+- Prefer Railway's **pooled** connection string (PgBouncer), if your plan
+  offers one, over the direct connection string.
+- Otherwise, append `?connection_limit=1&pool_timeout=20` to `DATABASE_URL`
+  in Vercel's environment variables — this caps how many connections a
+  single serverless instance's Prisma client will open, which is the
+  standard mitigation documented by Prisma for exactly this deployment
+  shape (see Prisma's "Deploy to Vercel" guide).
+- If this keeps happening under real traffic, consider Prisma Accelerate or
+  moving to a managed pooler in front of Postgres.
+
+This environment has no Railway/Vercel credentials, so the actual
+connection ceiling on your database and whether it's being hit in
+production could not be verified here — only reasoned about from the
+reported symptom and the code path that was missing error handling.
+
 ## Schema overview
 
 | Model | Purpose |

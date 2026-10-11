@@ -10,8 +10,8 @@ export async function Footer() {
   return (
     <footer className="no-print border-t border-white/10 bg-navy-950 text-white/70">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          <div>
+        <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-2 sm:gap-10 lg:grid-cols-4">
+          <div className="col-span-2 sm:col-span-1">
             <div className="mb-3 flex items-center gap-2">
               <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-electric-500">
                 <BookLogo className="h-5 w-5 text-navy-950" />

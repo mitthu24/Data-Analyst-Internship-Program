@@ -14,7 +14,7 @@ export function TrainerCard({ trainer }: { trainer: Trainer }) {
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={trainer.photoUrl}
-            alt={trainer.name}
+            alt={`${trainer.name}, ${trainer.role}`}
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
         ) : (

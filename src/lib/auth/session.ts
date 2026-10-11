@@ -52,16 +52,32 @@ export interface AuthenticatedFounder {
   mustChangePassword: boolean;
 }
 
-/** Verifies the session cookie against the database. Returns null if absent, expired, or revoked. */
+/**
+ * Verifies the session cookie against the database. Returns null if absent,
+ * expired, or revoked.
+ *
+ * Throws `Error("DATABASE_UNAVAILABLE")` — never the raw Prisma error,
+ * which can include connection details — if the database itself can't be
+ * reached, so callers (requireFounder/requireFounderForAction, and the
+ * /founder error boundary) can show a clear "try again" message instead of
+ * either crashing with Next's generic error page or silently treating a
+ * transient outage as "not logged in."
+ */
 export async function getCurrentFounder(): Promise<AuthenticatedFounder | null> {
   const cookieStore = await cookies();
   const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
   if (!token) return null;
 
-  const session = await prisma.session.findUnique({
-    where: { tokenHash: hashToken(token) },
-    include: { founder: true },
-  });
+  let session;
+  try {
+    session = await prisma.session.findUnique({
+      where: { tokenHash: hashToken(token) },
+      include: { founder: true },
+    });
+  } catch (err) {
+    console.error("[auth] session lookup failed:", err instanceof Error ? err.message : err);
+    throw new Error("DATABASE_UNAVAILABLE");
+  }
 
   if (!session || session.revokedAt || session.expiresAt < new Date()) {
     return null;

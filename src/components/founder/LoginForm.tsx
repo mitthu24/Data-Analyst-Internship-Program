@@ -22,7 +22,7 @@ export function LoginForm() {
   const [state, formAction] = useFormState(loginAction, initialState);
 
   return (
-    <form action={formAction} className="space-y-4 rounded-2xl border border-white/10 bg-white/5 p-6">
+    <form action={formAction} className="space-y-3.5 rounded-2xl border border-white/10 bg-white/5 p-5">
       <div>
         <label htmlFor="email" className="mb-1 block text-sm font-bold text-white/80">
           Email

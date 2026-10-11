@@ -76,13 +76,22 @@ export function ImageUrlField({
       )}
       {state.error && <p className="text-xs font-semibold text-rose-600">{state.error}</p>}
       {url && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={url}
-          alt="Preview"
-          className="h-20 w-20 rounded-lg border border-slate-200 object-cover"
-          onError={(e) => (e.currentTarget.style.display = "none")}
-        />
+        <div className="flex items-center gap-3">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={url}
+            alt="Current image preview"
+            className="h-20 w-20 rounded-lg border border-slate-200 object-cover"
+            onError={(e) => (e.currentTarget.style.display = "none")}
+          />
+          <button
+            type="button"
+            onClick={() => setUrl("")}
+            className="text-xs font-bold text-slate-500 underline hover:text-rose-600"
+          >
+            Clear image
+          </button>
+        </div>
       )}
     </div>
   );
