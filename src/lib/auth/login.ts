@@ -1,6 +1,6 @@
 import "server-only";
 import { headers } from "next/headers";
-import { prisma, classifyDatabaseError } from "@/lib/db/prisma";
+import { prisma, classifyDatabaseError, logDatabaseError } from "@/lib/db/prisma";
 import { verifyPassword } from "./password";
 import { createSession } from "./session";
 import { recordAuditEvent } from "./audit";
@@ -41,7 +41,7 @@ export async function attemptLogin(email: string, password: string): Promise<Log
   try {
     founder = await prisma.founder.findUnique({ where: { email: normalizedEmail } });
   } catch (err) {
-    console.error("[auth] founder lookup failed:", err instanceof Error ? err.message : err);
+    logDatabaseError("founder lookup", err);
     throw new Error(classifyDatabaseError(err));
   }
 

@@ -87,10 +87,20 @@ against a database with real data — both are destructive.
 ## Connecting Railway (the actual remaining step)
 
 1. Create a PostgreSQL database in a Railway project.
-2. Copy its connection string (Railway's "Connect" tab, the
-   `DATABASE_URL`-shaped value — enable "Public Networking" if migrating
-   from outside Railway's own network, e.g. from Vercel's build step or
-   your local machine).
+2. Copy its connection string from Railway's **"Connect" tab — the
+   `DATABASE_URL`-shaped value under "Public Networking"**, not the one
+   under "Private Networking"/the internal `DATABASE_URL` Railway auto-sets
+   on other services in the same project. This matters every time the app
+   runs, not just for the first migration: Vercel's serverless functions
+   run *outside* Railway's private network on every request (login
+   included), so if the internal (private-network) connection string ends
+   up in Vercel's `DATABASE_URL`, every database call will fail to connect
+   — Prisma reports this as `PrismaClientInitializationError`, which this
+   app surfaces as "The database is temporarily unavailable." **This is
+   the single most common cause of that message when it happens on every
+   request rather than intermittently** (see `classifyDatabaseError` in
+   `src/lib/db/prisma.ts`, and the serverless-connection-limit note below
+   for the *intermittent* variant of the same message).
 3. Set `DATABASE_URL` in:
    - Vercel: Project Settings → Environment Variables (Production,
      Preview, and Development as appropriate).

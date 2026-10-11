@@ -57,6 +57,22 @@ export function classifyDatabaseError(err: unknown): "DATABASE_UNAVAILABLE" | "D
   return "DATABASE_ERROR";
 }
 
+/**
+ * Logs a caught database error server-side with its classification and
+ * (if present) the actual Prisma error code — e.g. `P1001` (can't reach
+ * server) vs `P2021` (table missing) — which is the detail that actually
+ * distinguishes "wrong/unreachable connection string" from "database
+ * reachable but never migrated" in server logs, without ever logging the
+ * connection string itself, a password, a hash, or a session token (none
+ * of which appear in a Prisma error's `.code` or redacted message).
+ */
+export function logDatabaseError(context: string, err: unknown): void {
+  const category = classifyDatabaseError(err);
+  const code = err instanceof Prisma.PrismaClientKnownRequestError ? err.code : "n/a";
+  const message = err instanceof Error ? err.message.split("\n")[0].slice(0, 200) : String(err);
+  console.error(`[db] ${context} failed — category=${category} code=${code}:`, message);
+}
+
 /** Health check used by /founder dashboard and an internal status endpoint. */
 export async function checkDatabaseHealth(): Promise<{ ok: boolean; error?: string }> {
   if (!isDatabaseConfigured()) {

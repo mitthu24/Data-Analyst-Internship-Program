@@ -1,7 +1,7 @@
 import "server-only";
 import { cookies } from "next/headers";
 import { randomBytes, createHash } from "crypto";
-import { prisma, classifyDatabaseError } from "@/lib/db/prisma";
+import { prisma, classifyDatabaseError, logDatabaseError } from "@/lib/db/prisma";
 import { isProduction } from "@/lib/env";
 
 export const SESSION_COOKIE_NAME = "founder_session";
@@ -45,7 +45,7 @@ export async function createSession({ founderId, userAgent, ip }: CreateSessionI
       },
     });
   } catch (err) {
-    console.error("[auth] session creation failed:", err instanceof Error ? err.message : err);
+    logDatabaseError("session creation", err);
     throw new Error(classifyDatabaseError(err));
   }
 
@@ -89,7 +89,7 @@ export async function getCurrentFounder(): Promise<AuthenticatedFounder | null> 
       include: { founder: true },
     });
   } catch (err) {
-    console.error("[auth] session lookup failed:", err instanceof Error ? err.message : err);
+    logDatabaseError("session lookup", err);
     throw new Error(classifyDatabaseError(err));
   }
 
