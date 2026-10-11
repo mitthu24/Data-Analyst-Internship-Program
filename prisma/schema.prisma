@@ -1,0 +1,125 @@
+// Phase 2 schema: mirrors the Phase 1 static content shapes in src/lib/content/*.
+// Not yet connected to a live database — see .env.example. Public pages in Phase 1
+// render from the static content modules, independent of this schema, so the
+// Founder Admin Panel (Phase 2) can later move the same shapes into Postgres
+// without changing how pages consume them.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Settings {
+  id                   String   @id @default(cuid())
+  programName          String   @default("Data Analyst Internship Program")
+  durationLabel        String   @default("One week")
+  classDurationMinutes Int      @default(90)
+  coreClasses          Int      @default(21)
+  mentorSessions       Int      @default(4)
+  totalSessions        Int      @default(25)
+  totalHours           Float    @default(37.5)
+  referencePriceInr    Int      @default(19999)
+  launchPriceInr       Int      @default(1999)
+  enrollmentPaymentInr Int      @default(499)
+  enrollmentUrl        String   @default("https://superprofile.bio/vp/data-analyst-internship-program")
+  refundWindowDays     Int      @default(7)
+  scheduleNote         String   @default("The daily timetable for this batch is shared by the organizer closer to the start date.")
+  updatedAt            DateTime @updatedAt
+}
+
+enum SessionModule {
+  EXCEL
+  POWER_BI
+  SQL
+  AUTOMATION
+  AI_AND_WEB
+  CORPORATE
+  MENTOR
+}
+
+model CurriculumSession {
+  id              String        @id @default(cuid())
+  classNumber     Int           @unique
+  module          SessionModule
+  title           String
+  durationMinutes Int           @default(90)
+  topics          String[]
+  practicalExample String
+  handsOnExercise String
+  learningOutcome String
+  deliverable     String
+  tools           String[]
+  mentorName      String?
+  mentorTitle     String?
+  isEditableByFounder Boolean   @default(false)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model Trainer {
+  id        String   @id @default(cuid())
+  name      String
+  role      String
+  company   String?
+  location  String?
+  bio       String?
+  photoUrl  String?
+  linkedin  String?
+  isMentor  Boolean  @default(false)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum ProjectDifficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+model Project {
+  id              String            @id @default(cuid())
+  title           String
+  businessProblem String
+  tools           String[]
+  learningObjectives String[]
+  deliverables    String[]
+  difficulty      ProjectDifficulty @default(BEGINNER)
+  isPlannedExample Boolean          @default(true)
+  demoUrl         String?
+  githubUrl       String?
+  sortOrder       Int               @default(0)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+model Faq {
+  id        String   @id @default(cuid())
+  question  String
+  answer    String
+  sortOrder Int      @default(0)
+}
+
+model Testimonial {
+  id          String   @id @default(cuid())
+  studentName String
+  quote       String
+  role        String?
+  isApproved  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model Lead {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  message   String?
+  source    String   @default("website")
+  syncedToSheets Boolean @default(false)
+  createdAt DateTime @default(now())
+}
