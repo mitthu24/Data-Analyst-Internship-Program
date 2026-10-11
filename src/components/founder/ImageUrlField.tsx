@@ -47,7 +47,14 @@ export function ImageUrlField({
   return (
     <div className="space-y-2">
       <div className="flex gap-2">
-        <TextInput name={name} type="url" required={required} value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://..." />
+        <TextInput
+          name={name}
+          type="text"
+          required={required}
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          placeholder="https://... or /trainers/photo.jpg"
+        />
         {uploadsConfigured && (
           <form action={formAction}>
             <input

@@ -1,12 +1,12 @@
 import { z } from "zod";
-import { safeUrlSchema, emptyToNull, publishStatusSchema } from "./common";
+import { safeImageUrlSchema, emptyToNull, publishStatusSchema } from "./common";
 
 export const testimonialSchema = z
   .object({
     studentName: z.string().trim().min(2).max(120),
     role: emptyToNull,
     quote: z.string().trim().min(10).max(2000),
-    imageUrl: safeUrlSchema,
+    imageUrl: safeImageUrlSchema,
     consent: z.coerce.boolean(),
     sortOrder: z.coerce.number().int().min(0).default(0),
     status: publishStatusSchema,

@@ -47,6 +47,17 @@ recorded — this is not a predicted/expected list.
 | 14 | Brochure content and QR destination remain correct | Brochure page renders curriculum/trainers/pricing live from the database; QR code generated from the live `enrollmentUrl` | ✅ (QR payload = URL, not re-scanned with a camera in this environment, but generated via the same `qrcode` library and settings value as Phase 1, which was previously verified) |
 | 15 | All existing public routes continue working | All 15 Phase 1 public routes return 200 after the full Phase 2 migration | ✅ |
 | 16 | Mobile layouts at 320/375/390/430/768/1024/1440px | Playwright across all 15 public pages × 7 widths: checked HTTP status, `document.documentElement.scrollWidth` for horizontal overflow, and browser console errors | ✅ 105/105 checks clean, 0 console errors |
+| 17 | *(Phase 3, found during this testing — see note below)* | Logged in, edited a trainer's bio via `/founder/trainers/[id]/edit`, clicked Save Profile | 🔧 **Real bug found and fixed** — the Save button silently did nothing (no network request, no error shown). Root cause: `photoUrl` used `<input type="url">`, and every seeded trainer/gallery photo is a root-relative path (`/trainers/m-kumar.jpg`) — the browser's own HTML5 URL constraint validation rejected that silently and blocked the *entire form*, not just the photo field. Fixed by accepting root-relative paths in both the client input (`type="text"`) and the server-side Zod schema (new `safeImageUrlSchema`/`requiredImageUrlSchema` in `src/lib/validation/common.ts`), applied to `Trainer.photoUrl`, `GalleryItem.imageUrl`, `Project.imageUrl`, `Testimonial.imageUrl`. Re-verified: form now validates, the save persists to Postgres, and the public `/trainers` page reflects it immediately. 9 new unit tests added. |
+
+### A note on #17 (Phase 3)
+
+Like #2b, this was not on a pre-written checklist — it surfaced from actually
+driving the founder CMS end-to-end with Playwright rather than trusting that
+a previously-passing lifecycle test still held. Every trainer and gallery
+item seeded into the database uses a root-relative photo path, so this bug
+meant **the founder could not save any edit at all** to a trainer, mentor,
+or gallery item profile — with no visible error. It's the most significant
+finding from Phase 3 testing.
 
 ### A note on #2b
 

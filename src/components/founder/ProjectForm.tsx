@@ -81,8 +81,8 @@ export function ProjectForm({
       </label>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <Field label="Image URL">
-          <TextInput name="imageUrl" type="url" defaultValue={initial?.imageUrl ?? ""} />
+        <Field label="Image URL" hint="An https:// link, or a root-relative path like /projects/photo.jpg">
+          <TextInput name="imageUrl" type="text" defaultValue={initial?.imageUrl ?? ""} />
         </Field>
         <Field label="Live demo URL" hint="Only if a real, working demo exists">
           <TextInput name="demoUrl" type="url" defaultValue={initial?.demoUrl ?? ""} />

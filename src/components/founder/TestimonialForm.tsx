@@ -40,8 +40,8 @@ export function TestimonialForm({
         <TextArea name="quote" required rows={4} defaultValue={initial?.quote} />
       </Field>
 
-      <Field label="Photo URL (optional)">
-        <TextInput name="imageUrl" type="url" defaultValue={initial?.imageUrl ?? ""} />
+      <Field label="Photo URL (optional)" hint="An https:// link, or a root-relative path like /testimonials/photo.jpg">
+        <TextInput name="imageUrl" type="text" defaultValue={initial?.imageUrl ?? ""} />
       </Field>
 
       <label className="flex items-start gap-2 text-sm font-semibold text-slate-600">

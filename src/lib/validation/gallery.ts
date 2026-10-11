@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { emptyToNull, publishStatusSchema } from "./common";
+import { emptyToNull, publishStatusSchema, requiredImageUrlSchema } from "./common";
 
 export const galleryItemSchema = z.object({
-  imageUrl: z.string().trim().url("Enter a valid image URL."),
+  imageUrl: requiredImageUrlSchema,
   caption: emptyToNull,
   altText: z.string().trim().min(3).max(200),
   category: emptyToNull,

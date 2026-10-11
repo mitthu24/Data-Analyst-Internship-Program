@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { safeUrlSchema, emptyToNull, publishStatusSchema } from "./common";
+import { safeUrlSchema, safeImageUrlSchema, emptyToNull, publishStatusSchema } from "./common";
 
 const listField = z
   .string()
@@ -17,7 +17,7 @@ export const trainerSchema = z.object({
   location: emptyToNull,
   bio: emptyToNull,
   expertise: listField,
-  photoUrl: safeUrlSchema,
+  photoUrl: safeImageUrlSchema,
   linkedin: safeUrlSchema,
   isMentor: z.coerce.boolean(),
   sortOrder: z.coerce.number().int().min(0).default(0),

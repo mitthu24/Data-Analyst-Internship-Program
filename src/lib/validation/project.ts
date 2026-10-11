@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { safeUrlSchema, publishStatusSchema } from "./common";
+import { safeUrlSchema, safeImageUrlSchema, publishStatusSchema } from "./common";
 
 const listField = z
   .string()
@@ -31,7 +31,7 @@ export const projectSchema = z.object({
   deliverables: listField,
   difficulty: z.enum(["BEGINNER", "INTERMEDIATE", "ADVANCED"]),
   isPlannedExample: z.coerce.boolean(),
-  imageUrl: safeUrlSchema,
+  imageUrl: safeImageUrlSchema,
   demoUrl: safeUrlSchema,
   githubUrl: safeUrlSchema,
   sortOrder: z.coerce.number().int().min(0).default(0),
