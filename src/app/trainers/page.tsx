@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Section, SectionHeading } from "@/components/Section";
 import { TrainerCard } from "@/components/TrainerCard";
+import { MentorCard } from "@/components/MentorCard";
 import { getTrainers, getCorporateMentors } from "@/lib/content/trainers";
 
 export const metadata: Metadata = {
@@ -38,21 +39,7 @@ export default async function TrainersPage() {
         />
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {corporateMentors.map((m) => (
-            <div key={m.session} className="rounded-2xl border border-slate-200 bg-white p-5 text-center">
-              <span
-                className={`mb-3 inline-block rounded-full px-3 py-1 text-xs font-bold ${
-                  m.assigned ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"
-                }`}
-              >
-                {m.session}
-              </span>
-              <h3 className="font-bold text-navy-900">{m.name}</h3>
-              <p className="mt-1 text-xs text-slate-500">{m.title}</p>
-              <p className="mt-3 text-sm text-slate-600">{m.topic}</p>
-              {!m.assigned && (
-                <p className="mt-2 text-xs font-semibold text-amber-600">Mentor and topic to be confirmed</p>
-              )}
-            </div>
+            <MentorCard key={m.session} mentor={m} />
           ))}
         </div>
       </Section>

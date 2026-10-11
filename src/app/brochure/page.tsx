@@ -55,7 +55,7 @@ export default async function BrochurePage() {
                 Data Analyst <span className="text-gradient-lime">Internship Program</span>
               </h1>
               <p className="mt-4 max-w-md text-white/75">
-                A {settings.durationLabel.toLowerCase()}, practical analytics internship for MBA students,
+                An {settings.durationLabel.toLowerCase()}, practical analytics internship for MBA students,
                 graduates, freshers, and working professionals — {settings.totalSessions} sessions,{" "}
                 {settings.totalHours} instructional hours.
               </p>
@@ -176,7 +176,7 @@ export default async function BrochurePage() {
         {/* PAGE 4 — SCHEDULE + PRICING + ENROLL */}
         <section className="print-page flex min-h-[297mm] w-full flex-col justify-between rounded-2xl bg-gradient-to-br from-navy-950 to-navy-900 p-10 text-white shadow-xl print:rounded-none print:p-[15mm] print:shadow-none">
           <div>
-            <h2 className="mb-4 text-2xl font-black">One-Week Schedule Format</h2>
+            <h2 className="mb-4 text-2xl font-black">8-Week Schedule Format</h2>
             <p className="mb-6 text-sm text-white/70">{settings.scheduleNote}</p>
 
             <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4">

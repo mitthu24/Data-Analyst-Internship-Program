@@ -15,7 +15,7 @@ export const heroContentSchema = z.object({
 });
 export type HeroContent = z.infer<typeof heroContentSchema>;
 export const defaultHeroContent: HeroContent = {
-  title: "Become a Job-Ready Data Analyst in One Practical Week",
+  title: "Become a Job-Ready Data Analyst in 8 Practical Weeks",
   description:
     "Master Advanced Excel, Power BI, SQL, automation, and AI-assisted dashboards through 25 hands-on sessions built around real corporate scenarios — for MBA students, graduates, freshers, and working professionals.",
   ctaLabel: "Enroll Now — Pay ₹499",
@@ -45,7 +45,7 @@ export const footerContentSchema = z.object({
 });
 export type FooterContent = z.infer<typeof footerContentSchema>;
 export const defaultFooterContent: FooterContent = {
-  text: "A one-week, practical analytics internship covering Excel, Power BI, SQL, automation, and AI-assisted dashboards for MBA students, graduates, freshers, and working professionals.",
+  text: "An 8-week, practical analytics internship covering Excel, Power BI, SQL, automation, and AI-assisted dashboards for MBA students, graduates, freshers, and working professionals.",
 };
 
 export const announcementBannerSchema = z.object({

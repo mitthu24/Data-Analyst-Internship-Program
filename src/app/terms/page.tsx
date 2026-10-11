@@ -22,7 +22,7 @@ export default async function TermsPage() {
           <div>
             <h2 className="mb-2 text-lg font-bold text-navy-900">Program structure</h2>
             <p>
-              The Data Analyst Internship Program is a {settings.durationLabel.toLowerCase()} program consisting of{" "}
+              The Data Analyst Internship Program is an {settings.durationLabel.toLowerCase()} program consisting of{" "}
               {settings.totalSessions} sessions ({settings.coreClasses} core classes and {settings.mentorSessions}{" "}
               corporate expert mentoring sessions), each {settings.classDurationMinutes} minutes long, for a total of{" "}
               {settings.totalHours} instructional hours. {settings.scheduleNote}

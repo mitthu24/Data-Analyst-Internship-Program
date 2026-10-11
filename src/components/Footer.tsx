@@ -2,6 +2,7 @@ import Link from "next/link";
 import { footerLegalNav, footerProgramNav } from "@/lib/content/nav";
 import { getSettings, formatInr } from "@/lib/content/settings";
 import { getFooterContent } from "@/lib/content/site-content";
+import { BookLogo } from "./icons/BookLogo";
 
 export async function Footer() {
   const [settings, footer] = await Promise.all([getSettings(), getFooterContent()]);
@@ -12,10 +13,13 @@ export async function Footer() {
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <div className="mb-3 flex items-center gap-2">
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-electric-500 font-black text-white">
-                DA
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-electric-500">
+                <BookLogo className="h-5 w-5 text-navy-950" />
               </span>
-              <span className="text-sm font-extrabold text-white">{settings.programName}</span>
+              <span className="leading-tight">
+                <span className="block text-sm font-extrabold text-white">Skillo</span>
+                <span className="block text-[11px] text-white/45">{settings.programName}</span>
+              </span>
             </div>
             <p className="text-sm leading-relaxed">{footer.text}</p>
           </div>
@@ -70,7 +74,7 @@ export async function Footer() {
         </div>
 
         <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-xs sm:flex-row">
-          <p>© {new Date().getFullYear()} {settings.programName}. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Skillo. All rights reserved.</p>
           <p>No guaranteed placement, salary, or employment outcomes are promised.</p>
         </div>
       </div>

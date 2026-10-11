@@ -4,7 +4,7 @@
 
 export const settings = {
   programName: "Data Analyst Internship Program",
-  durationLabel: "One week",
+  durationLabel: "8-Week",
   classDurationMinutes: 90,
   coreClasses: 21,
   mentorSessions: 4,
@@ -18,7 +18,7 @@ export const settings = {
   enrollmentUrl: "https://superprofile.bio/vp/data-analyst-internship-program",
   refundWindowDays: 7,
   scheduleNote:
-    "This is a one-week program. The exact daily timetable and class timings for your batch are shared by the organizer before the batch starts and can be configured per batch — no fixed dates are set here.",
+    "This is an 8-week program. The exact weekly timetable and class timings for your batch are shared by the organizer before the batch starts and can be configured per batch — no fixed dates are set here.",
   leadsSheetUrl:
     "https://docs.google.com/spreadsheets/d/16l1B5ixtoFkJpQd93NuKr6UviNDh5puWQB-MagLq_n0/edit?usp=sharing",
 } as const;

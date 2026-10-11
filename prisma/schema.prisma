@@ -80,7 +80,7 @@ model ContentEntry {
 model Settings {
   id                   String   @id @default("singleton")
   programName          String   @default("Data Analyst Internship Program")
-  durationLabel        String   @default("One week")
+  durationLabel        String   @default("8-Week")
   classDurationMinutes Int      @default(90)
   coreClasses          Int      @default(21)
   mentorSessions       Int      @default(4)

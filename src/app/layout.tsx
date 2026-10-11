@@ -14,11 +14,11 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Data Analyst Internship Program",
-    template: "%s · Data Analyst Internship Program",
+    default: "Skillo — Data Analyst Internship Program",
+    template: "%s · Skillo",
   },
   description:
-    "A one-week, practical Data Analyst Internship Program covering Advanced Excel, Power BI, SQL, automation, and AI-assisted dashboards. 25 sessions, 37.5 instructional hours.",
+    "Skillo's 8-week, practical Data Analyst Internship Program covering Advanced Excel, Power BI, SQL, automation, and AI-assisted dashboards. 25 sessions, 37.5 instructional hours.",
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

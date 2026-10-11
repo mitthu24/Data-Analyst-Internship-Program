@@ -4,7 +4,9 @@ export interface Trainer {
   company?: string;
   location?: string;
   bio: string;
+  expertise?: string[];
   photoUrl?: string;
+  linkedin?: string;
   isMentor?: boolean;
 }
 
@@ -15,12 +17,14 @@ export const trainers: Trainer[] = [
     company: "Advance Ply",
     location: "Sector 62, Noida",
     bio: "Works as a Data Analyst at Advance Ply, bringing day-to-day corporate reporting and MIS experience into the classroom. Full biography to be confirmed by the founder.",
+    expertise: ["Excel", "Power BI", "SQL"],
     photoUrl: "/trainers/m-kumar.jpg",
   },
   {
     name: "Abhinav Panday",
     role: "Core Trainer",
     bio: "Core trainer for the program's Excel, Power BI, and SQL modules. Full biography to be confirmed by the founder.",
+    expertise: ["Excel", "Power BI", "SQL"],
     photoUrl: "/trainers/abhinav-panday.jpg",
   },
   {
@@ -29,6 +33,7 @@ export const trainers: Trainer[] = [
     company: "Creme Castle",
     location: "Sector 63, Noida",
     bio: "MIS Analyst and Controller at Creme Castle, contributing real-world MIS and reporting-controller experience to the program. Full biography to be confirmed by the founder.",
+    expertise: ["HR Guidance", "Interview Prep", "Career Growth"],
     photoUrl: "/trainers/raj-kumar.jpg",
   },
 ];
@@ -39,6 +44,7 @@ export interface CorporateMentor {
   session: string;
   topic: string;
   assigned: boolean;
+  expertise?: string[];
   photoUrl?: string;
 }
 
@@ -49,6 +55,7 @@ export const corporateMentors: CorporateMentor[] = [
     session: "Class 22",
     topic: "HR and Recruitment Insights",
     assigned: true,
+    expertise: ["Excel", "Power BI", "SQL"],
     photoUrl: "/trainers/aditya-singh.jpg",
   },
   {
@@ -57,6 +64,7 @@ export const corporateMentors: CorporateMentor[] = [
     session: "Class 23",
     topic: "Marketing Analytics and Business Performance",
     assigned: true,
+    expertise: ["Marketing Strategy", "Business Analytics", "Growth Insights"],
     photoUrl: "/trainers/pankaj-chauhan.jpg",
   },
   {
@@ -65,6 +73,7 @@ export const corporateMentors: CorporateMentor[] = [
     session: "Class 24",
     topic: "Business Analytics and Corporate Reporting",
     assigned: false,
+    expertise: ["Business Analytics", "Corporate Reporting", "Industry Insights"],
   },
   {
     name: "Mentor to be assigned",
@@ -72,6 +81,7 @@ export const corporateMentors: CorporateMentor[] = [
     session: "Class 25",
     topic: "Specialization-Specific Career Masterclass",
     assigned: false,
+    expertise: ["Business Analytics", "Corporate Reporting", "Industry Insights"],
   },
 ];
 
@@ -91,7 +101,9 @@ export async function getTrainers(): Promise<Trainer[]> {
       company: r.company ?? undefined,
       location: r.location ?? undefined,
       bio: r.bio ?? "",
+      expertise: r.expertise.length > 0 ? r.expertise : undefined,
       photoUrl: r.photoUrl ?? undefined,
+      linkedin: r.linkedin ?? undefined,
     }));
   } catch {
     return trainers;
@@ -115,6 +127,7 @@ export async function getCorporateMentors(): Promise<CorporateMentor[]> {
       session: `Class ${r.classNumber}`,
       topic: r.title,
       assigned: Boolean(r.trainer || r.mentorName),
+      expertise: r.trainer && r.trainer.expertise.length > 0 ? r.trainer.expertise : undefined,
       photoUrl: r.trainer?.photoUrl ?? undefined,
     }));
   } catch {

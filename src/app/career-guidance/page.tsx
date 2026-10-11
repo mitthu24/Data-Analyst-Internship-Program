@@ -72,7 +72,7 @@ export default async function CareerGuidancePage() {
       </Section>
 
       <Section className="bg-navy-950 text-center text-white">
-        <h2 className="text-2xl font-black sm:text-3xl">Build a career-ready portfolio in one week</h2>
+        <h2 className="text-2xl font-black sm:text-3xl">Build a career-ready portfolio in 8 weeks</h2>
         <div className="mt-6 flex justify-center">
           <EnrollButton enrollmentUrl={settings.enrollmentUrl} />
         </div>

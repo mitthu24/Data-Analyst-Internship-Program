@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import { mainNav } from "@/lib/content/nav";
 import { EnrollButton } from "./EnrollButton";
+import { BookLogo } from "./icons/BookLogo";
 
 export function Navbar({ enrollmentUrl }: { enrollmentUrl: string }) {
   const [open, setOpen] = useState(false);
@@ -15,12 +16,14 @@ export function Navbar({ enrollmentUrl }: { enrollmentUrl: string }) {
     <header className="no-print sticky top-0 z-50 border-b border-white/10 bg-navy-950/95 backdrop-blur-md">
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-2 text-white" onClick={() => setOpen(false)}>
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-electric-500 font-black">
-            DA
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-electric-500">
+            <BookLogo className="h-5 w-5 text-navy-950" />
           </span>
-          <span className="text-sm font-extrabold leading-tight sm:text-base">
-            Data Analyst
-            <br className="sm:hidden" /> Internship Program
+          <span className="leading-tight">
+            <span className="block text-lg font-extrabold tracking-tight">Skillo</span>
+            <span className="hidden text-[11px] font-semibold text-white/55 sm:block">
+              Data Analyst Internship Program
+            </span>
           </span>
         </Link>
 

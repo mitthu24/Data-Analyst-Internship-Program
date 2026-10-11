@@ -24,7 +24,7 @@ export default async function AboutPage() {
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
           <h1 className="text-4xl font-black sm:text-5xl">About the Program</h1>
           <p className="mt-4 text-lg text-white/75">
-            A {settings.durationLabel.toLowerCase()}, practical internship that takes you from fundamentals to a
+            An {settings.durationLabel.toLowerCase()}, practical internship that takes you from fundamentals to a
             working analytics portfolio — {settings.totalSessions} sessions, {settings.totalHours} instructional
             hours.
           </p>

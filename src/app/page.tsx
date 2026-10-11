@@ -7,6 +7,7 @@ import { SkillTicker } from "@/components/SkillTicker";
 import { SessionCard } from "@/components/SessionCard";
 import { ProjectCard } from "@/components/ProjectCard";
 import { TrainerCard } from "@/components/TrainerCard";
+import { MentorCard } from "@/components/MentorCard";
 import { FaqAccordion } from "@/components/FaqAccordion";
 import { ButtonLink } from "@/components/Button";
 import { getSettings } from "@/lib/content/settings";
@@ -49,15 +50,15 @@ export default async function HomePage() {
   return (
     <>
       {/* HERO */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 py-20 text-white sm:py-28">
+      <section className="relative overflow-hidden bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 py-10 text-white sm:py-14">
         <div className="absolute inset-0 bg-grid-overlay opacity-40 [mask-image:linear-gradient(135deg,rgba(0,0,0,.6),transparent_65%)]" />
         <div className="absolute -right-24 -top-24 h-96 w-96 rounded-full bg-electric-500/20 blur-3xl" />
         <div className="absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-emerald-500/20 blur-3xl" />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+          <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
             <div>
-              <div className="mb-5 flex flex-wrap gap-2">
+              <div className="mb-3 flex flex-wrap gap-2">
                 <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-bold backdrop-blur-sm">
                   📅 {settings.durationLabel} Program
                 </span>
@@ -68,18 +69,18 @@ export default async function HomePage() {
                   🛡️ {settings.refundWindowDays}-Day Money-Back Guarantee
                 </span>
               </div>
-              <h1 className="text-4xl font-black leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+              <h1 className="text-3xl font-black leading-[1.08] tracking-tight sm:text-4xl lg:text-5xl">
                 {hero.title}
               </h1>
-              <p className="mt-5 max-w-xl text-lg font-medium text-white/75">{hero.description}</p>
-              <div className="mt-8 flex flex-wrap gap-4">
+              <p className="mt-3 max-w-xl text-base font-medium text-white/75 sm:text-lg">{hero.description}</p>
+              <div className="mt-5 flex flex-wrap gap-4">
                 <EnrollButton enrollmentUrl={settings.enrollmentUrl} label={hero.ctaLabel} />
                 <ButtonLink href="/curriculum" variant="ghost">
                   {hero.secondaryCtaLabel}
                 </ButtonLink>
               </div>
 
-              <div className="mt-10 grid grid-cols-3 gap-3 sm:max-w-md">
+              <div className="mt-6 grid grid-cols-3 gap-3 sm:max-w-md">
                 <KpiCard value={`${settings.totalSessions}`} label="Total Sessions" />
                 <KpiCard value={`${settings.totalHours}`} label="Instructional Hours" />
                 <KpiCard value={`${settings.mentorSessions}`} label="Corporate Mentors" />
@@ -154,17 +155,13 @@ export default async function HomePage() {
             <TrainerCard key={trainer.name} trainer={trainer} />
           ))}
         </div>
-        <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-6">
+        <div className="mt-8">
           <h3 className="mb-4 text-center text-sm font-bold uppercase tracking-wide text-slate-500">
             Corporate Expert Mentoring Sessions
           </h3>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {corporateMentors.map((m) => (
-              <div key={m.session} className="rounded-xl bg-slate-50 p-4 text-center">
-                <p className="text-xs font-bold text-emerald-600">{m.session}</p>
-                <p className="mt-1 text-sm font-bold text-navy-900">{m.name}</p>
-                <p className="mt-0.5 text-xs text-slate-500">{m.title}</p>
-              </div>
+              <MentorCard key={m.session} mentor={m} />
             ))}
           </div>
         </div>

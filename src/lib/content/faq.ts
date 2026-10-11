@@ -12,7 +12,7 @@ export const faqs: FaqItem[] = [
   {
     question: "What is the program format?",
     answer:
-      "A one-week program with 25 sessions in total: 21 core classes plus 4 corporate expert mentoring sessions, each 90 minutes long, for 37.5 hours of instructional time overall. The exact daily schedule and class timings for your batch are configured and shared by the organizer before the batch starts.",
+      "An 8-week program with 25 sessions in total: 21 core classes plus 4 corporate expert mentoring sessions, each 90 minutes long, for 37.5 hours of instructional time overall. The exact weekly schedule and class timings for your batch are configured and shared by the organizer before the batch starts.",
   },
   {
     question: "How much does it cost?",
