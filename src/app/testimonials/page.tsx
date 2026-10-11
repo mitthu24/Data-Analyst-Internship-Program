@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import { Section } from "@/components/Section";
-import { testimonials } from "@/lib/content/testimonials";
+import { getTestimonials } from "@/lib/content/testimonials";
 
 export const metadata: Metadata = {
   title: "Testimonials",
   description: "Approved student testimonials for the Data Analyst Internship Program.",
 };
 
-export default function TestimonialsPage() {
+export default async function TestimonialsPage() {
+  const testimonials = await getTestimonials();
   return (
     <>
       <section className="bg-gradient-to-br from-navy-950 to-navy-800 py-16 text-white sm:py-20">

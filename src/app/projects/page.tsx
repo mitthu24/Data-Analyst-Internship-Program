@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import { Section, SectionHeading } from "@/components/Section";
 import { ProjectCard } from "@/components/ProjectCard";
-import { projects } from "@/lib/content/projects";
+import { getProjects } from "@/lib/content/projects";
 
 export const metadata: Metadata = {
   title: "Practical Projects",
   description: "The practical project portfolio built during the Data Analyst Internship Program.",
 };
 
-export default function ProjectsPage() {
+export default async function ProjectsPage() {
+  const projects = await getProjects();
   return (
     <>
       <section className="bg-gradient-to-br from-navy-950 to-navy-800 py-16 text-white sm:py-20">

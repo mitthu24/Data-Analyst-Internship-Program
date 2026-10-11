@@ -1,7 +1,8 @@
-import { settings, formatInr } from "@/lib/content/settings";
+import { getSettings, formatInr } from "@/lib/content/settings";
 import { EnrollButton } from "./EnrollButton";
 
-export function PriceCard() {
+export async function PriceCard() {
+  const settings = await getSettings();
   const { referencePriceInr, launchPriceInr, enrollmentPaymentInr } = settings.pricing;
   const discountPct = Math.round(((referencePriceInr - launchPriceInr) / referencePriceInr) * 100);
 
@@ -39,7 +40,7 @@ export function PriceCard() {
         </li>
       </ul>
 
-      <EnrollButton className="w-full" />
+      <EnrollButton enrollmentUrl={settings.enrollmentUrl} className="w-full" />
       <p className="mt-3 text-center text-xs text-white/40">{settings.durationLabel} program · seats limited per batch</p>
     </div>
   );

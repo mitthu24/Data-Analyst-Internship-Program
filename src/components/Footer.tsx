@@ -1,8 +1,11 @@
 import Link from "next/link";
 import { footerLegalNav, footerProgramNav } from "@/lib/content/nav";
-import { settings } from "@/lib/content/settings";
+import { getSettings, formatInr } from "@/lib/content/settings";
+import { getFooterContent } from "@/lib/content/site-content";
 
-export function Footer() {
+export async function Footer() {
+  const [settings, footer] = await Promise.all([getSettings(), getFooterContent()]);
+
   return (
     <footer className="no-print border-t border-white/10 bg-navy-950 text-white/70">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -12,12 +15,9 @@ export function Footer() {
               <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-electric-500 font-black text-white">
                 DA
               </span>
-              <span className="text-sm font-extrabold text-white">Data Analyst Internship Program</span>
+              <span className="text-sm font-extrabold text-white">{settings.programName}</span>
             </div>
-            <p className="text-sm leading-relaxed">
-              A one-week, practical analytics internship covering Excel, Power BI, SQL, automation, and
-              AI-assisted dashboards for MBA students, graduates, freshers, and working professionals.
-            </p>
+            <p className="text-sm leading-relaxed">{footer.text}</p>
           </div>
 
           <div>
@@ -54,7 +54,9 @@ export function Footer() {
           <div>
             <h3 className="mb-3 text-sm font-bold text-white">Enroll</h3>
             <p className="mb-3 text-sm">
-              Reserve your seat with an initial payment of ₹499. Launch price ₹1,999 (reference price ₹19,999).
+              Reserve your seat with an initial payment of {formatInr(settings.pricing.enrollmentPaymentInr)}. Launch
+              price {formatInr(settings.pricing.launchPriceInr)} (reference price{" "}
+              {formatInr(settings.pricing.referencePriceInr)}).
             </p>
             <a
               href={settings.enrollmentUrl}
@@ -68,7 +70,7 @@ export function Footer() {
         </div>
 
         <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-xs sm:flex-row">
-          <p>© {new Date().getFullYear()} Data Analyst Internship Program. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} {settings.programName}. All rights reserved.</p>
           <p>No guaranteed placement, salary, or employment outcomes are promised.</p>
         </div>
       </div>

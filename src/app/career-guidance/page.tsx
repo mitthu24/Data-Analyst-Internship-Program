@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Section, SectionHeading } from "@/components/Section";
 import { EnrollButton } from "@/components/EnrollButton";
+import { getSettings } from "@/lib/content/settings";
+import { getCareerGuidanceContent } from "@/lib/content/site-content";
 
 export const metadata: Metadata = {
   title: "Career Guidance",
@@ -23,18 +25,14 @@ const readinessSkills = [
   { title: "Professional behaviour", desc: "Corporate etiquette and working norms covered in Class 21." },
 ];
 
-export default function CareerGuidancePage() {
+export default async function CareerGuidancePage() {
+  const [settings, careerGuidance] = await Promise.all([getSettings(), getCareerGuidanceContent()]);
   return (
     <>
       <section className="bg-gradient-to-br from-navy-950 to-navy-800 py-16 text-white sm:py-20">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
           <h1 className="text-4xl font-black sm:text-5xl">Career Guidance</h1>
-          <p className="mt-4 text-lg text-white/75">
-            Career paths across specializations, and the corporate readiness skills covered in the program.
-          </p>
-          <p className="mx-auto mt-3 max-w-2xl text-sm text-white/50">
-            We describe realistic career directions only — we do not promise employment or any specific salary.
-          </p>
+          <p className="mt-4 text-lg text-white/75">{careerGuidance.intro}</p>
         </div>
       </section>
 
@@ -76,7 +74,7 @@ export default function CareerGuidancePage() {
       <Section className="bg-navy-950 text-center text-white">
         <h2 className="text-2xl font-black sm:text-3xl">Build a career-ready portfolio in one week</h2>
         <div className="mt-6 flex justify-center">
-          <EnrollButton />
+          <EnrollButton enrollmentUrl={settings.enrollmentUrl} />
         </div>
       </Section>
     </>

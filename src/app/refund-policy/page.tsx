@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import { Section } from "@/components/Section";
-import { settings } from "@/lib/content/settings";
+import { getSettings } from "@/lib/content/settings";
 
 export const metadata: Metadata = {
   title: "Refund Policy",
   description: "The 7-day refund policy for the Data Analyst Internship Program.",
 };
 
-export default function RefundPolicyPage() {
+export default async function RefundPolicyPage() {
+  const settings = await getSettings();
   return (
     <>
       <section className="bg-gradient-to-br from-navy-950 to-navy-800 py-14 text-white">
@@ -43,6 +44,13 @@ export default function RefundPolicyPage() {
             <li>Final approval and processing of each refund request rests with the program founder.</li>
             <li>Misuse of the guarantee (e.g. repeated enroll-and-refund cycles) may result in a refund request being declined.</li>
           </ul>
+
+          {settings.refundPolicyText && (
+            <>
+              <h3 className="mb-2 mt-6 text-base font-bold text-navy-900">Additional policy notes</h3>
+              <p className="whitespace-pre-wrap">{settings.refundPolicyText}</p>
+            </>
+          )}
 
           <h3 className="mb-2 mt-6 text-base font-bold text-navy-900">Questions</h3>
           <p>

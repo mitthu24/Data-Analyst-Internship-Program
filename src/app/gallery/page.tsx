@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import { Section } from "@/components/Section";
-import { galleryItems } from "@/lib/content/gallery";
+import { getGalleryItems } from "@/lib/content/gallery";
 
 export const metadata: Metadata = {
   title: "Gallery",
   description: "Corporate learning and team gallery for the Data Analyst Internship Program.",
 };
 
-export default function GalleryPage() {
+export default async function GalleryPage() {
+  const galleryItems = await getGalleryItems();
   return (
     <>
       <section className="bg-gradient-to-br from-navy-950 to-navy-800 py-16 text-white sm:py-20">
@@ -33,7 +34,7 @@ export default function GalleryPage() {
               <img
                 key={item.imageUrl}
                 src={item.imageUrl}
-                alt={item.caption}
+                alt={item.altText ?? item.caption}
                 className="aspect-square w-full rounded-xl object-cover"
               />
             ))}

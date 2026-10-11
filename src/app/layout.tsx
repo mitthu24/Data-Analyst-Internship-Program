@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { AnnouncementBanner } from "@/components/AnnouncementBanner";
+import { getSettings } from "@/lib/content/settings";
+import { getAnnouncementBanner } from "@/lib/content/site-content";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -18,11 +21,14 @@ export const metadata: Metadata = {
     "A one-week, practical Data Analyst Internship Program covering Advanced Excel, Power BI, SQL, automation, and AI-assisted dashboards. 25 sessions, 37.5 instructional hours.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const [settings, banner] = await Promise.all([getSettings(), getAnnouncementBanner()]);
+
   return (
     <html lang="en" className={inter.variable}>
       <body className="flex min-h-screen flex-col bg-white font-sans text-navy-900 antialiased">
-        <Navbar />
+        <AnnouncementBanner banner={banner} />
+        <Navbar enrollmentUrl={settings.enrollmentUrl} />
         <main className="flex-1">{children}</main>
         <Footer />
       </body>

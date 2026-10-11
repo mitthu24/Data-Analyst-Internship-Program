@@ -1,21 +1,22 @@
 import type { Metadata } from "next";
 import { Section, SectionHeading } from "@/components/Section";
 import { TrainerCard } from "@/components/TrainerCard";
-import { trainers, corporateMentors } from "@/lib/content/trainers";
+import { getTrainers, getCorporateMentors } from "@/lib/content/trainers";
 
 export const metadata: Metadata = {
   title: "Trainers & Mentors",
   description: "Meet the trainers and corporate mentors of the Data Analyst Internship Program.",
 };
 
-export default function TrainersPage() {
+export default async function TrainersPage() {
+  const [trainers, corporateMentors] = await Promise.all([getTrainers(), getCorporateMentors()]);
   return (
     <>
       <section className="bg-gradient-to-br from-navy-950 to-navy-800 py-16 text-white sm:py-20">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
           <h1 className="text-4xl font-black sm:text-5xl">Trainers & Corporate Mentors</h1>
           <p className="mt-4 text-lg text-white/75">
-            Genuine photos and full biographies will be added as they are confirmed by the founder.
+            Meet the trainers and corporate mentors running the program.
           </p>
         </div>
       </section>

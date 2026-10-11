@@ -8,7 +8,6 @@ export interface Trainer {
   isMentor?: boolean;
 }
 
-// Neutral placeholders until the founder supplies genuine photos and biographies.
 export const trainers: Trainer[] = [
   {
     name: "M. Kumar",
@@ -16,11 +15,13 @@ export const trainers: Trainer[] = [
     company: "Advance Ply",
     location: "Sector 62, Noida",
     bio: "Works as a Data Analyst at Advance Ply, bringing day-to-day corporate reporting and MIS experience into the classroom. Full biography to be confirmed by the founder.",
+    photoUrl: "/trainers/m-kumar.jpg",
   },
   {
     name: "Abhinav Panday",
     role: "Core Trainer",
     bio: "Core trainer for the program's Excel, Power BI, and SQL modules. Full biography to be confirmed by the founder.",
+    photoUrl: "/trainers/abhinav-panday.jpg",
   },
   {
     name: "Raj Kumar",
@@ -28,6 +29,7 @@ export const trainers: Trainer[] = [
     company: "Creme Castle",
     location: "Sector 63, Noida",
     bio: "MIS Analyst and Controller at Creme Castle, contributing real-world MIS and reporting-controller experience to the program. Full biography to be confirmed by the founder.",
+    photoUrl: "/trainers/raj-kumar.jpg",
   },
 ];
 
@@ -37,6 +39,7 @@ export interface CorporateMentor {
   session: string;
   topic: string;
   assigned: boolean;
+  photoUrl?: string;
 }
 
 export const corporateMentors: CorporateMentor[] = [
@@ -46,6 +49,7 @@ export const corporateMentors: CorporateMentor[] = [
     session: "Class 22",
     topic: "HR and Recruitment Insights",
     assigned: true,
+    photoUrl: "/trainers/aditya-singh.jpg",
   },
   {
     name: "Pankaj Chauhan",
@@ -53,6 +57,7 @@ export const corporateMentors: CorporateMentor[] = [
     session: "Class 23",
     topic: "Marketing Analytics and Business Performance",
     assigned: true,
+    photoUrl: "/trainers/pankaj-chauhan.jpg",
   },
   {
     name: "Mentor to be assigned",
@@ -69,3 +74,50 @@ export const corporateMentors: CorporateMentor[] = [
     assigned: false,
   },
 ];
+
+/** Published core trainers from Postgres, falling back to the static list above. */
+export async function getTrainers(): Promise<Trainer[]> {
+  const { prisma, isDatabaseConfigured } = await import("@/lib/db/prisma");
+  if (!isDatabaseConfigured()) return trainers;
+  try {
+    const rows = await prisma.trainer.findMany({
+      where: { isMentor: false, status: "PUBLISHED" },
+      orderBy: { sortOrder: "asc" },
+    });
+    if (rows.length === 0) return trainers;
+    return rows.map((r) => ({
+      name: r.name,
+      role: r.role,
+      company: r.company ?? undefined,
+      location: r.location ?? undefined,
+      bio: r.bio ?? "",
+      photoUrl: r.photoUrl ?? undefined,
+    }));
+  } catch {
+    return trainers;
+  }
+}
+
+/** Published corporate mentors for classes 22–25, read from the curriculum so session/topic stay accurate. */
+export async function getCorporateMentors(): Promise<CorporateMentor[]> {
+  const { prisma, isDatabaseConfigured } = await import("@/lib/db/prisma");
+  if (!isDatabaseConfigured()) return corporateMentors;
+  try {
+    const rows = await prisma.curriculumSession.findMany({
+      where: { module: "MENTOR", status: "PUBLISHED" },
+      orderBy: { classNumber: "asc" },
+      include: { trainer: true },
+    });
+    if (rows.length === 0) return corporateMentors;
+    return rows.map((r) => ({
+      name: r.trainer?.name ?? r.mentorName ?? "Mentor to be assigned",
+      title: r.trainer?.role ?? r.mentorTitle ?? r.title,
+      session: `Class ${r.classNumber}`,
+      topic: r.title,
+      assigned: Boolean(r.trainer || r.mentorName),
+      photoUrl: r.trainer?.photoUrl ?? undefined,
+    }));
+  } catch {
+    return corporateMentors;
+  }
+}

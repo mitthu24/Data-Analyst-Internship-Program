@@ -11,7 +11,7 @@ export interface CurriculumSession {
   classNumber: number;
   module: SessionModule;
   title: string;
-  durationMinutes: 90;
+  durationMinutes: number;
   topics: string[];
   practicalExample: string;
   handsOnExercise: string;
@@ -370,3 +370,52 @@ export const modules: SessionModule[] = [
   "Corporate Readiness",
   "Corporate Expert Mentoring",
 ];
+
+const DB_MODULE_TO_LABEL: Record<string, SessionModule> = {
+  EXCEL: "Advanced Excel",
+  POWER_BI: "Power BI",
+  SQL: "SQL",
+  AUTOMATION: "Automation & Deployment",
+  AI_AND_WEB: "AI & Web Dashboards",
+  CORPORATE: "Corporate Readiness",
+  MENTOR: "Corporate Expert Mentoring",
+};
+
+/**
+ * Published curriculum for public pages, read from Postgres and falling
+ * back to the static `curriculum` array above whenever the database is
+ * unconfigured, unreachable, or has no published rows yet — the public
+ * site always renders a correct 25-session curriculum either way.
+ */
+export async function getCurriculum(): Promise<CurriculumSession[]> {
+  const { prisma, isDatabaseConfigured } = await import("@/lib/db/prisma");
+  if (!isDatabaseConfigured()) return curriculum;
+  try {
+    const rows = await prisma.curriculumSession.findMany({
+      where: { status: "PUBLISHED" },
+      orderBy: { order: "asc" },
+      include: { trainer: true },
+    });
+    if (rows.length === 0) return curriculum;
+    return rows.map((r) => ({
+      classNumber: r.classNumber,
+      module: DB_MODULE_TO_LABEL[r.module] ?? "Advanced Excel",
+      title: r.title,
+      durationMinutes: r.durationMinutes,
+      topics: r.topics,
+      practicalExample: r.practicalExample,
+      handsOnExercise: r.handsOnExercise,
+      learningOutcome: r.learningOutcome,
+      deliverable: r.deliverable,
+      tools: r.tools,
+      mentor: r.trainer
+        ? { name: r.trainer.name, title: r.trainer.role }
+        : r.mentorName
+          ? { name: r.mentorName, title: r.mentorTitle ?? "" }
+          : undefined,
+      founderEditable: r.isEditableByFounder,
+    }));
+  } catch {
+    return curriculum;
+  }
+}

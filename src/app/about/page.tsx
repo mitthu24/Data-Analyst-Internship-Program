@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Section, SectionHeading } from "@/components/Section";
 import { EnrollButton } from "@/components/EnrollButton";
-import { settings } from "@/lib/content/settings";
+import { getSettings } from "@/lib/content/settings";
+import { getAboutContent } from "@/lib/content/site-content";
 
 export const metadata: Metadata = {
   title: "About the Program",
@@ -15,7 +16,8 @@ const methodology = [
   { icon: "🧑‍🏫", title: "Mentor access", desc: "Four dedicated corporate expert mentoring sessions complement the 21 core classes." },
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const [settings, about] = await Promise.all([getSettings(), getAboutContent()]);
   return (
     <>
       <section className="bg-gradient-to-br from-navy-950 to-navy-800 py-16 text-white sm:py-20">
@@ -31,11 +33,7 @@ export default function AboutPage() {
 
       <Section>
         <div className="mx-auto max-w-3xl space-y-5 text-slate-700">
-          <p>
-            The Data Analyst Internship Program is designed for MBA students from every specialization, BBA, B.Com,
-            B.Sc. and other graduates, freshers, job seekers, and working professionals who want practical,
-            job-relevant analytics skills without a multi-month commitment.
-          </p>
+          <p>{about.intro}</p>
           <p>
             Across {settings.coreClasses} core classes and {settings.mentorSessions} corporate expert mentoring
             sessions ({settings.totalSessions} sessions in total, {settings.classDurationMinutes} minutes each), you
@@ -62,7 +60,7 @@ export default function AboutPage() {
       <Section className="bg-navy-950 text-center text-white">
         <h2 className="text-2xl font-black sm:text-3xl">Ready to get started?</h2>
         <div className="mt-6 flex justify-center">
-          <EnrollButton />
+          <EnrollButton enrollmentUrl={settings.enrollmentUrl} />
         </div>
       </Section>
     </>

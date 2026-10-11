@@ -44,3 +44,16 @@ export const faqs: FaqItem[] = [
     answer: "Use the enrollment link on this site to reserve your seat with the initial ₹499 payment.",
   },
 ];
+
+/** Published FAQs from Postgres, falling back to the static list above. */
+export async function getFaqs(): Promise<FaqItem[]> {
+  const { prisma, isDatabaseConfigured } = await import("@/lib/db/prisma");
+  if (!isDatabaseConfigured()) return faqs;
+  try {
+    const rows = await prisma.faq.findMany({ where: { status: "PUBLISHED" }, orderBy: { sortOrder: "asc" } });
+    if (rows.length === 0) return faqs;
+    return rows.map((r) => ({ question: r.question, answer: r.answer }));
+  } catch {
+    return faqs;
+  }
+}

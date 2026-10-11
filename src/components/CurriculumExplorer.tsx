@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import clsx from "clsx";
-import { curriculum, modules, type SessionModule } from "@/lib/content/curriculum";
+import { modules, type SessionModule, type CurriculumSession } from "@/lib/content/curriculum";
 import { SessionCard } from "./SessionCard";
 
-export function CurriculumExplorer() {
+export function CurriculumExplorer({ curriculum }: { curriculum: CurriculumSession[] }) {
   const [activeModule, setActiveModule] = useState<SessionModule | "All">("All");
 
   const filtered = activeModule === "All" ? curriculum : curriculum.filter((s) => s.module === activeModule);

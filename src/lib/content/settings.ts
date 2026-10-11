@@ -24,3 +24,82 @@ export const settings = {
 } as const;
 
 export const formatInr = (amount: number): string => `₹${amount.toLocaleString("en-IN")}`;
+
+export type Settings = {
+  programName: string;
+  durationLabel: string;
+  classDurationMinutes: number;
+  coreClasses: number;
+  mentorSessions: number;
+  totalSessions: number;
+  totalHours: number;
+  pricing: {
+    referencePriceInr: number;
+    launchPriceInr: number;
+    enrollmentPaymentInr: number;
+  };
+  enrollmentUrl: string;
+  refundWindowDays: number;
+  refundPolicyText: string;
+  scheduleNote: string;
+  leadsSheetUrl: string;
+  batchDates: string | null;
+  batchTiming: string | null;
+  batchMode: string | null;
+  batchVenue: string | null;
+  contactEmail: string | null;
+  contactPhone: string | null;
+};
+
+/**
+ * Program settings and pricing from Postgres, falling back to the static
+ * object above whenever the database is unconfigured or unreachable.
+ * `leadsSheetUrl` is a fixed reference, not founder-editable.
+ */
+export async function getSettings(): Promise<Settings> {
+  const fallback: Settings = {
+    ...settings,
+    pricing: { ...settings.pricing },
+    refundPolicyText: "",
+    batchDates: null,
+    batchTiming: null,
+    batchMode: null,
+    batchVenue: null,
+    contactEmail: null,
+    contactPhone: null,
+  };
+
+  const { prisma, isDatabaseConfigured } = await import("@/lib/db/prisma");
+  if (!isDatabaseConfigured()) return fallback;
+  try {
+    const row = await prisma.settings.findUnique({ where: { id: "singleton" } });
+    if (!row) return fallback;
+    return {
+      programName: row.programName,
+      durationLabel: row.durationLabel,
+      classDurationMinutes: row.classDurationMinutes,
+      coreClasses: row.coreClasses,
+      mentorSessions: row.mentorSessions,
+      totalSessions: row.totalSessions,
+      totalHours: row.totalHours,
+      pricing: {
+        referencePriceInr: row.referencePriceInr,
+        launchPriceInr: row.launchPriceInr,
+        enrollmentPaymentInr: row.enrollmentPaymentInr,
+      },
+      enrollmentUrl: row.enrollmentUrl,
+      refundWindowDays: row.refundWindowDays,
+      refundPolicyText: row.refundPolicyText,
+      scheduleNote: row.scheduleNote,
+      leadsSheetUrl: settings.leadsSheetUrl,
+      batchDates: row.batchDates,
+      batchTiming: row.batchTiming,
+      batchMode: row.batchMode,
+      batchVenue: row.batchVenue,
+      contactEmail: row.contactEmail,
+      contactPhone: row.contactPhone,
+    };
+  } catch {
+    return fallback;
+  }
+}

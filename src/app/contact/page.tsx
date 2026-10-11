@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import { Section } from "@/components/Section";
 import { ContactForm } from "@/components/ContactForm";
-import { settings } from "@/lib/content/settings";
+import { getSettings, formatInr } from "@/lib/content/settings";
 
 export const metadata: Metadata = {
   title: "Contact",
   description: "Get in touch about the Data Analyst Internship Program.",
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const settings = await getSettings();
   return (
     <>
       <section className="bg-gradient-to-br from-navy-950 to-navy-800 py-16 text-white sm:py-20">
@@ -29,7 +30,8 @@ export default function ContactPage() {
           <div>
             <h2 className="mb-3 text-xl font-bold text-navy-900">Ready to enroll?</h2>
             <p className="mb-4 text-sm text-slate-600">
-              Reserve your seat directly through our enrollment link — the initial payment is ₹499.
+              Reserve your seat directly through our enrollment link — the initial payment is{" "}
+              {formatInr(settings.pricing.enrollmentPaymentInr)}.
             </p>
             <a
               href={settings.enrollmentUrl}

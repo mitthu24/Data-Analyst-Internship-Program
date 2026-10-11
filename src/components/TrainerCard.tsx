@@ -9,9 +9,18 @@ export function TrainerCard({ trainer }: { trainer: Trainer }) {
 
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm transition-transform hover:-translate-y-1 hover:shadow-xl">
-      <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-navy-800 to-navy-900 text-2xl font-black text-lime-400 ring-4 ring-emerald-500/15">
-        {initials}
-      </div>
+      {trainer.photoUrl ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={trainer.photoUrl}
+          alt={trainer.name}
+          className="mx-auto mb-4 h-24 w-24 rounded-full object-cover ring-4 ring-emerald-500/15"
+        />
+      ) : (
+        <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-navy-800 to-navy-900 text-2xl font-black text-lime-400 ring-4 ring-emerald-500/15">
+          {initials}
+        </div>
+      )}
       <h3 className="text-lg font-bold text-navy-900">{trainer.name}</h3>
       <p className="mt-1 text-sm font-semibold text-emerald-600">{trainer.role}</p>
       {(trainer.company || trainer.location) && (

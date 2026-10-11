@@ -8,6 +8,7 @@ export interface Project {
   isPlannedExample: boolean;
   demoUrl?: string;
   githubUrl?: string;
+  imageUrl?: string;
 }
 
 export const projects: Project[] = [
@@ -84,3 +85,33 @@ export const projects: Project[] = [
     isPlannedExample: true,
   },
 ];
+
+const DB_DIFFICULTY_TO_LABEL: Record<string, Project["difficulty"]> = {
+  BEGINNER: "Beginner",
+  INTERMEDIATE: "Intermediate",
+  ADVANCED: "Advanced",
+};
+
+/** Published projects from Postgres, falling back to the static list above. */
+export async function getProjects(): Promise<Project[]> {
+  const { prisma, isDatabaseConfigured } = await import("@/lib/db/prisma");
+  if (!isDatabaseConfigured()) return projects;
+  try {
+    const rows = await prisma.project.findMany({ where: { status: "PUBLISHED" }, orderBy: { sortOrder: "asc" } });
+    if (rows.length === 0) return projects;
+    return rows.map((r) => ({
+      title: r.title,
+      businessProblem: r.businessProblem,
+      tools: r.tools,
+      learningObjectives: r.learningObjectives,
+      deliverables: r.deliverables,
+      difficulty: DB_DIFFICULTY_TO_LABEL[r.difficulty] ?? "Beginner",
+      isPlannedExample: r.isPlannedExample,
+      demoUrl: r.demoUrl ?? undefined,
+      githubUrl: r.githubUrl ?? undefined,
+      imageUrl: r.imageUrl ?? undefined,
+    }));
+  } catch {
+    return projects;
+  }
+}

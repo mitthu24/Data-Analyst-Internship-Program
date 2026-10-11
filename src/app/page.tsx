@@ -9,12 +9,13 @@ import { ProjectCard } from "@/components/ProjectCard";
 import { TrainerCard } from "@/components/TrainerCard";
 import { FaqAccordion } from "@/components/FaqAccordion";
 import { ButtonLink } from "@/components/Button";
-import { settings } from "@/lib/content/settings";
-import { curriculum } from "@/lib/content/curriculum";
-import { trainers, corporateMentors } from "@/lib/content/trainers";
-import { projects } from "@/lib/content/projects";
-import { faqs } from "@/lib/content/faq";
-import { programStats } from "@/lib/content/stats";
+import { getSettings } from "@/lib/content/settings";
+import { getCurriculum } from "@/lib/content/curriculum";
+import { getTrainers, getCorporateMentors } from "@/lib/content/trainers";
+import { getProjects } from "@/lib/content/projects";
+import { getFaqs } from "@/lib/content/faq";
+import { getProgramStats } from "@/lib/content/stats";
+import { getHeroContent } from "@/lib/content/site-content";
 
 const audiences = [
   { icon: "🎓", title: "MBA Students", desc: "Every specialization — finance, marketing, HR, operations, and more." },
@@ -32,7 +33,17 @@ const careerPaths = [
   { icon: "⚙️", title: "Operations Analytics", desc: "Process and performance reporting for operations specializations." },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [settings, curriculum, trainers, corporateMentors, projects, faqs, programStats, hero] = await Promise.all([
+    getSettings(),
+    getCurriculum(),
+    getTrainers(),
+    getCorporateMentors(),
+    getProjects(),
+    getFaqs(),
+    getProgramStats(),
+    getHeroContent(),
+  ]);
   const previewSessions = curriculum.slice(0, 4);
 
   return (
@@ -58,17 +69,13 @@ export default function HomePage() {
                 </span>
               </div>
               <h1 className="text-4xl font-black leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
-                Become a <span className="text-gradient-lime">Job-Ready Data Analyst</span> in One Practical Week
+                {hero.title}
               </h1>
-              <p className="mt-5 max-w-xl text-lg font-medium text-white/75">
-                Master Advanced Excel, Power BI, SQL, automation, and AI-assisted dashboards through{" "}
-                {settings.totalSessions} hands-on sessions built around real corporate scenarios — for MBA students,
-                graduates, freshers, and working professionals.
-              </p>
+              <p className="mt-5 max-w-xl text-lg font-medium text-white/75">{hero.description}</p>
               <div className="mt-8 flex flex-wrap gap-4">
-                <EnrollButton />
+                <EnrollButton enrollmentUrl={settings.enrollmentUrl} label={hero.ctaLabel} />
                 <ButtonLink href="/curriculum" variant="ghost">
-                  View Full Curriculum
+                  {hero.secondaryCtaLabel}
                 </ButtonLink>
               </div>
 
@@ -237,14 +244,15 @@ export default function HomePage() {
       <Section className="bg-navy-950 text-white">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-black sm:text-4xl">
-            Reserve Your Seat for <span className="text-gradient-lime">₹499</span>
+            Reserve Your Seat for{" "}
+            <span className="text-gradient-lime">₹{settings.pricing.enrollmentPaymentInr.toLocaleString("en-IN")}</span>
           </h2>
           <p className="mt-3 text-white/70">
             Launch price {settings.pricing.launchPriceInr && `₹${settings.pricing.launchPriceInr.toLocaleString("en-IN")}`} (reference ₹
             {settings.pricing.referencePriceInr.toLocaleString("en-IN")}). Seats are limited per batch.
           </p>
           <div className="mt-6 flex justify-center">
-            <EnrollButton />
+            <EnrollButton enrollmentUrl={settings.enrollmentUrl} />
           </div>
         </div>
       </Section>

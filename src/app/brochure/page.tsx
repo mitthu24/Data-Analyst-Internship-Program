@@ -1,19 +1,31 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { PrintButton } from "@/components/PrintButton";
 import { generateQrDataUrl } from "@/lib/qr";
-import { settings, formatInr } from "@/lib/content/settings";
-import { curriculum, modules } from "@/lib/content/curriculum";
-import { trainers, corporateMentors } from "@/lib/content/trainers";
-import { projects } from "@/lib/content/projects";
+import { getSettings, formatInr } from "@/lib/content/settings";
+import { getCurriculum, modules } from "@/lib/content/curriculum";
+import { getTrainers, getCorporateMentors } from "@/lib/content/trainers";
+import { getProjects } from "@/lib/content/projects";
+import { getBrochureContent } from "@/lib/content/site-content";
 
 export const metadata: Metadata = {
   title: "Brochure",
   description: "Download the printable Data Analyst Internship Program brochure.",
 };
 
-const allTools = Array.from(new Set(curriculum.flatMap((s) => s.tools))).filter(Boolean);
-
 export default async function BrochurePage() {
+  const [settings, curriculum, trainers, corporateMentors, projects, brochure] = await Promise.all([
+    getSettings(),
+    getCurriculum(),
+    getTrainers(),
+    getCorporateMentors(),
+    getProjects(),
+    getBrochureContent(),
+  ]);
+
+  if (!brochure.visible) notFound();
+
+  const allTools = Array.from(new Set(curriculum.flatMap((s) => s.tools))).filter(Boolean);
   const qrDataUrl = await generateQrDataUrl(settings.enrollmentUrl);
 
   return (
@@ -87,8 +99,8 @@ export default async function BrochurePage() {
         <section className="print-page min-h-[297mm] w-full rounded-2xl bg-white p-10 shadow-xl print:rounded-none print:p-[15mm] print:shadow-none">
           <h2 className="mb-3 text-2xl font-black text-navy-900">About the Program</h2>
           <p className="mb-6 text-sm leading-relaxed text-slate-600">
-            Built for MBA students from every specialization, BBA/B.Com/B.Sc. and other graduates, freshers, job
-            seekers, and working professionals. {settings.scheduleNote}
+            {brochure.introOverride ||
+              `Built for MBA students from every specialization, BBA/B.Com/B.Sc. and other graduates, freshers, job seekers, and working professionals. ${settings.scheduleNote}`}
           </p>
 
           <h2 className="mb-3 text-2xl font-black text-navy-900">

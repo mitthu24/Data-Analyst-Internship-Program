@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import { Section } from "@/components/Section";
-import { settings } from "@/lib/content/settings";
+import { getSettings } from "@/lib/content/settings";
 
 export const metadata: Metadata = {
   title: "Terms",
   description: "Program terms for the Data Analyst Internship Program.",
 };
 
-export default function TermsPage() {
+export default async function TermsPage() {
+  const settings = await getSettings();
   return (
     <>
       <section className="bg-gradient-to-br from-navy-950 to-navy-800 py-14 text-white">

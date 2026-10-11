@@ -7,7 +7,7 @@ import clsx from "clsx";
 import { mainNav } from "@/lib/content/nav";
 import { EnrollButton } from "./EnrollButton";
 
-export function Navbar() {
+export function Navbar({ enrollmentUrl }: { enrollmentUrl: string }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
@@ -40,7 +40,7 @@ export function Navbar() {
         </div>
 
         <div className="hidden xl:block">
-          <EnrollButton label="Enroll — ₹499" />
+          <EnrollButton enrollmentUrl={enrollmentUrl} label="Enroll — ₹499" />
         </div>
 
         <button
@@ -76,7 +76,7 @@ export function Navbar() {
                 {item.label}
               </Link>
             ))}
-            <EnrollButton className="mt-2 w-full" label="Enroll — ₹499" />
+            <EnrollButton enrollmentUrl={enrollmentUrl} className="mt-2 w-full" label="Enroll — ₹499" />
           </div>
         </div>
       )}
