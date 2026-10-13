@@ -10,7 +10,7 @@ import { getBrochureContent } from "@/lib/content/site-content";
 
 export const metadata: Metadata = {
   title: "Brochure",
-  description: "Download the printable Data Analyst Internship Program brochure.",
+  description: "Download the printable Skillo Academy Placement-Oriented Internship Program brochure.",
 };
 
 export default async function BrochurePage() {
@@ -52,12 +52,14 @@ export default async function BrochurePage() {
                 </span>
               </div>
               <h1 className="text-4xl font-black leading-tight sm:text-5xl">
-                Data Analyst <span className="text-gradient-lime">Internship Program</span>
+                Skillo Academy
+                <br />
+                <span className="text-gradient-lime">Placement-Oriented Internship Program</span>
               </h1>
               <p className="mt-4 max-w-md text-white/75">
-                An {settings.durationLabel.toLowerCase()}, practical analytics internship for MBA students,
-                graduates, freshers, and working professionals — {settings.totalSessions} sessions,{" "}
-                {settings.totalHours} instructional hours.
+                An {settings.durationLabel.toLowerCase()}, placement-oriented internship program for MBA/BBA
+                students and graduates, other streams, freshers, and early-career professionals —{" "}
+                {settings.totalSessions} sessions, {settings.totalHours} instructional hours.
               </p>
 
               <div className="mt-8 grid grid-cols-3 gap-3">
@@ -100,7 +102,11 @@ export default async function BrochurePage() {
           <h2 className="mb-3 text-2xl font-black text-navy-900">About the Program</h2>
           <p className="mb-6 text-sm leading-relaxed text-slate-600">
             {brochure.introOverride ||
-              `Built for MBA students from every specialization, BBA/B.Com/B.Sc. and other graduates, freshers, job seekers, and working professionals. ${settings.scheduleNote}`}
+              `A placement-oriented, career-preparation program built for MBA/BBA students and graduates, students from other degree programs, freshers, and early-career professionals. Build practical corporate skills, work on real-world projects, and prepare for interviews. ${settings.scheduleNote}`}
+          </p>
+          <p className="mb-6 text-xs font-semibold text-slate-400">
+            This is placement-oriented preparation, not a guaranteed-placement program — no specific job, salary, or
+            package is promised.
           </p>
 
           <h2 className="mb-3 text-2xl font-black text-navy-900">

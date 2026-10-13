@@ -6,7 +6,7 @@ import { getCareerGuidanceContent } from "@/lib/content/site-content";
 
 export const metadata: Metadata = {
   title: "Career Guidance",
-  description: "Career paths and corporate readiness guidance from the Data Analyst Internship Program.",
+  description: "Career paths and corporate readiness guidance from the Skillo Academy Placement-Oriented Internship Program.",
 };
 
 const specializationPaths = [
@@ -57,6 +57,10 @@ export default async function CareerGuidancePage() {
             </div>
           ))}
         </div>
+        <p className="mx-auto mt-6 max-w-3xl text-center text-sm text-slate-500">
+          These are illustrative directions, not guaranteed roles — eligibility and outcomes depend on your
+          background, performance, and the job market.
+        </p>
       </Section>
 
       <Section className="bg-slate-50">

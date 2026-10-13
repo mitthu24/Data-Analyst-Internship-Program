@@ -4,7 +4,7 @@ import { getTestimonials } from "@/lib/content/testimonials";
 
 export const metadata: Metadata = {
   title: "Testimonials",
-  description: "Approved student testimonials for the Data Analyst Internship Program.",
+  description: "Approved student testimonials for the Skillo Academy Placement-Oriented Internship Program.",
 };
 
 export default async function TestimonialsPage() {

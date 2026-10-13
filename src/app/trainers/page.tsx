@@ -6,7 +6,7 @@ import { getTrainers, getCorporateMentors } from "@/lib/content/trainers";
 
 export const metadata: Metadata = {
   title: "Trainers & Mentors",
-  description: "Meet the trainers and corporate mentors of the Data Analyst Internship Program.",
+  description: "Meet the trainers and corporate mentors of the Skillo Academy Placement-Oriented Internship Program.",
 };
 
 export default async function TrainersPage() {

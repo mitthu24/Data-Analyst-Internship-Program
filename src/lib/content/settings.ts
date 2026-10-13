@@ -3,7 +3,7 @@
 // pages should always import from here rather than hardcoding these values.
 
 export const settings = {
-  programName: "Data Analyst Internship Program",
+  programName: "Placement-Oriented Internship Program",
   durationLabel: "8-Week",
   classDurationMinutes: 90,
   coreClasses: 21,

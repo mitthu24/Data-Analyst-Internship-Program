@@ -4,7 +4,7 @@ import { getSettings } from "@/lib/content/settings";
 
 export const metadata: Metadata = {
   title: "Terms",
-  description: "Program terms for the Data Analyst Internship Program.",
+  description: "Program terms for the Skillo Academy Placement-Oriented Internship Program.",
 };
 
 export default async function TermsPage() {
@@ -22,7 +22,7 @@ export default async function TermsPage() {
           <div>
             <h2 className="mb-2 text-lg font-bold text-navy-900">Program structure</h2>
             <p>
-              The Data Analyst Internship Program is an {settings.durationLabel.toLowerCase()} program consisting of{" "}
+              The Skillo Academy Placement-Oriented Internship Program is an {settings.durationLabel.toLowerCase()} program consisting of{" "}
               {settings.totalSessions} sessions ({settings.coreClasses} core classes and {settings.mentorSessions}{" "}
               corporate expert mentoring sessions), each {settings.classDurationMinutes} minutes long, for a total of{" "}
               {settings.totalHours} instructional hours. {settings.scheduleNote}

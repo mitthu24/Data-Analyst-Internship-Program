@@ -4,7 +4,7 @@ import { getGalleryItems } from "@/lib/content/gallery";
 
 export const metadata: Metadata = {
   title: "Gallery",
-  description: "Corporate learning and team gallery for the Data Analyst Internship Program.",
+  description: "Corporate learning and team gallery for the Skillo Academy Placement-Oriented Internship Program.",
 };
 
 export default async function GalleryPage() {

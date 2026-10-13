@@ -21,8 +21,8 @@ export default async function FounderLoginPage() {
           <span className="mx-auto mb-2 flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-electric-500">
             <BookLogo className="h-6 w-6 text-navy-950" />
           </span>
-          <h1 className="text-lg font-bold text-white">Skillo — Founder Admin</h1>
-          <p className="mt-0.5 text-sm text-white/50">Data Analyst Internship Program</p>
+          <h1 className="text-lg font-bold text-white">Skillo Academy — Founder Admin</h1>
+          <p className="mt-0.5 text-sm text-white/50">Placement-Oriented Internship Program</p>
         </div>
 
         {!isDatabaseConfigured() && (

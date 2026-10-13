@@ -4,20 +4,60 @@ import { useId, useState } from "react";
 import clsx from "clsx";
 import { modules, type CurriculumSession } from "@/lib/content/curriculum";
 
-const moduleStyle: Record<string, { icon: string; badge: string; iconBg: string }> = {
-  "Advanced Excel": { icon: "📊", badge: "bg-emerald-500/15 text-emerald-700", iconBg: "bg-emerald-500/10" },
-  "Power BI": { icon: "📈", badge: "bg-electric-500/15 text-electric-700", iconBg: "bg-electric-500/10" },
-  SQL: { icon: "🗄️", badge: "bg-lime-500/20 text-lime-800", iconBg: "bg-lime-500/10" },
-  "Automation & Deployment": { icon: "⚙️", badge: "bg-amber-500/15 text-amber-700", iconBg: "bg-amber-500/10" },
-  "AI & Web Dashboards": { icon: "🤖", badge: "bg-purple-500/15 text-purple-700", iconBg: "bg-purple-500/10" },
-  "Corporate Readiness": { icon: "💼", badge: "bg-slate-200 text-slate-700", iconBg: "bg-slate-100" },
-  "Corporate Expert Mentoring": { icon: "🎤", badge: "bg-rose-500/15 text-rose-700", iconBg: "bg-rose-500/10" },
+const moduleStyle: Record<string, { icon: string; badge: string; iconBg: string; desc: string }> = {
+  "Advanced Excel": {
+    icon: "📊",
+    badge: "bg-emerald-500/15 text-emerald-700",
+    iconBg: "bg-emerald-500/10",
+    desc: "Reporting, analysis, business calculations, and workplace productivity.",
+  },
+  "Power BI": {
+    icon: "📈",
+    badge: "bg-electric-500/15 text-electric-700",
+    iconBg: "bg-electric-500/10",
+    desc: "Interactive dashboards, data visualization, and business reporting.",
+  },
+  SQL: {
+    icon: "🗄️",
+    badge: "bg-lime-500/20 text-lime-800",
+    iconBg: "bg-lime-500/10",
+    desc: "Querying structured data and answering business questions.",
+  },
+  "Automation & Deployment": {
+    icon: "⚙️",
+    badge: "bg-amber-500/15 text-amber-700",
+    iconBg: "bg-amber-500/10",
+    desc: "Reduce repetitive tasks, improve reporting workflows, and deploy a practical project.",
+  },
+  "AI & Web Dashboards": {
+    icon: "🤖",
+    badge: "bg-purple-500/15 text-purple-700",
+    iconBg: "bg-purple-500/10",
+    desc: "Use AI tools responsibly to accelerate dashboard development and problem-solving.",
+  },
+  "Corporate Readiness": {
+    icon: "💼",
+    badge: "bg-slate-200 text-slate-700",
+    iconBg: "bg-slate-100",
+    desc: "Understand workplace expectations, communication, and career preparation.",
+  },
+  "Corporate Expert Mentoring": {
+    icon: "🎤",
+    badge: "bg-rose-500/15 text-rose-700",
+    iconBg: "bg-rose-500/10",
+    desc: "Learn from professionals about their roles, work practices, and career experiences.",
+  },
 };
 
 function ModuleCard({ moduleName, sessions }: { moduleName: string; sessions: CurriculumSession[] }) {
   const [open, setOpen] = useState(false);
   const panelId = useId();
-  const style = moduleStyle[moduleName] ?? { icon: "📘", badge: "bg-slate-100 text-slate-600", iconBg: "bg-slate-100" };
+  const style = moduleStyle[moduleName] ?? {
+    icon: "📘",
+    badge: "bg-slate-100 text-slate-600",
+    iconBg: "bg-slate-100",
+    desc: "",
+  };
 
   return (
     <div
@@ -48,6 +88,7 @@ function ModuleCard({ moduleName, sessions }: { moduleName: string; sessions: Cu
             <span className={clsx("mt-1 inline-block rounded-full px-2.5 py-0.5 text-xs font-bold", style.badge)}>
               {sessions.length} {sessions.length === 1 ? "session" : "sessions"}
             </span>
+            {style.desc && <span className="mt-1.5 block text-xs text-slate-500">{style.desc}</span>}
           </span>
         </span>
         <svg

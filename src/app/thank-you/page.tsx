@@ -6,7 +6,7 @@ import { getSettings, formatInr } from "@/lib/content/settings";
 
 export const metadata: Metadata = {
   title: "Thank You",
-  description: "Thank you for your interest in the Data Analyst Internship Program.",
+  description: "Thank you for your interest in the Skillo Academy Placement-Oriented Internship Program.",
 };
 
 export default async function ThankYouPage() {

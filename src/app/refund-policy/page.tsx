@@ -4,7 +4,7 @@ import { getSettings } from "@/lib/content/settings";
 
 export const metadata: Metadata = {
   title: "Refund Policy",
-  description: "The 7-day refund policy for the Data Analyst Internship Program.",
+  description: "The 7-day refund policy for the Skillo Academy Placement-Oriented Internship Program.",
 };
 
 export default async function RefundPolicyPage() {

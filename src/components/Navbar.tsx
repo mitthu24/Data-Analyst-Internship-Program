@@ -20,9 +20,9 @@ export function Navbar({ enrollmentUrl }: { enrollmentUrl: string }) {
             <BookLogo className="h-5 w-5 text-navy-950" />
           </span>
           <span className="leading-tight">
-            <span className="block text-lg font-extrabold tracking-tight">Skillo</span>
+            <span className="block text-lg font-extrabold tracking-tight">Skillo Academy</span>
             <span className="hidden text-[11px] font-semibold text-white/55 sm:block">
-              Data Analyst Internship Program
+              Placement-Oriented Internship Program
             </span>
           </span>
         </Link>

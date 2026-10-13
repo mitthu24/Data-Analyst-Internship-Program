@@ -17,7 +17,7 @@ export async function Footer() {
                 <BookLogo className="h-5 w-5 text-navy-950" />
               </span>
               <span className="leading-tight">
-                <span className="block text-sm font-extrabold text-white">Skillo</span>
+                <span className="block text-sm font-extrabold text-white">Skillo Academy</span>
                 <span className="block text-[11px] text-white/45">{settings.programName}</span>
               </span>
             </div>
@@ -74,7 +74,7 @@ export async function Footer() {
         </div>
 
         <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-xs sm:flex-row">
-          <p>© {new Date().getFullYear()} Skillo. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Skillo Academy. All rights reserved.</p>
           <p>No guaranteed placement, salary, or employment outcomes are promised.</p>
         </div>
       </div>

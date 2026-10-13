@@ -2,18 +2,23 @@ import type { Metadata } from "next";
 import { Section, SectionHeading } from "@/components/Section";
 import { EnrollButton } from "@/components/EnrollButton";
 import { getSettings } from "@/lib/content/settings";
-import { getAboutContent } from "@/lib/content/site-content";
+import { getAboutContent, getSeoContent } from "@/lib/content/site-content";
 
-export const metadata: Metadata = {
-  title: "About the Program",
-  description: "Program overview and learning methodology for the Data Analyst Internship Program.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getSeoContent();
+  return {
+    title: seo.aboutTitle || "About the Program",
+    description:
+      seo.aboutDescription ||
+      "Program overview and learning methodology for the Skillo Academy Placement-Oriented Internship Program.",
+  };
+}
 
 const methodology = [
   { icon: "🧩", title: "Learn by doing", desc: "Every session pairs a concept with a hands-on exercise using corporate-style sample data." },
   { icon: "🏢", title: "Corporate scenarios", desc: "Topics are taught through practical examples drawn from real reporting and MIS workflows." },
-  { icon: "📦", title: "Portfolio-first", desc: "You leave with deliverables — dashboards, queries, and automations — not just notes." },
-  { icon: "🧑‍🏫", title: "Mentor access", desc: "Four dedicated corporate expert mentoring sessions complement the 21 core classes." },
+  { icon: "📦", title: "Portfolio-first", desc: "You leave with a professional portfolio — dashboards, queries, and automations — not just notes." },
+  { icon: "🧑‍🏫", title: "Career readiness", desc: "Four dedicated corporate expert mentoring sessions complement the 21 core classes to build interview and workplace readiness." },
 ];
 
 export default async function AboutPage() {
@@ -24,9 +29,9 @@ export default async function AboutPage() {
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
           <h1 className="text-4xl font-black sm:text-5xl">About the Program</h1>
           <p className="mt-4 text-lg text-white/75">
-            An {settings.durationLabel.toLowerCase()}, practical internship that takes you from fundamentals to a
-            working analytics portfolio — {settings.totalSessions} sessions, {settings.totalHours} instructional
-            hours.
+            An {settings.durationLabel.toLowerCase()}, placement-oriented internship that takes you from
+            fundamentals to a working project portfolio and interview readiness — {settings.totalSessions} sessions,{" "}
+            {settings.totalHours} instructional hours.
           </p>
         </div>
       </section>

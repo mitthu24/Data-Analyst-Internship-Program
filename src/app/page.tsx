@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Section, SectionHeading } from "@/components/Section";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { EnrollButton } from "@/components/EnrollButton";
@@ -16,18 +17,36 @@ import { getTrainers, getCorporateMentors } from "@/lib/content/trainers";
 import { getProjects } from "@/lib/content/projects";
 import { getFaqs } from "@/lib/content/faq";
 import { getProgramStats } from "@/lib/content/stats";
-import { getHeroContent } from "@/lib/content/site-content";
+import { getHeroContent, getSeoContent } from "@/lib/content/site-content";
+
+/** Lets the founder override the homepage's SEO title/description/OG image via the CMS; falls back to the site default otherwise. */
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getSeoContent();
+  return {
+    title: seo.homeTitle || undefined,
+    description: seo.homeDescription || undefined,
+    openGraph: seo.ogImageUrl ? { images: [{ url: seo.ogImageUrl }] } : undefined,
+  };
+}
 
 const audiences = [
-  { icon: "🎓", title: "MBA Students", desc: "Every specialization — finance, marketing, HR, operations, and more." },
-  { icon: "📘", title: "Graduates", desc: "BBA, B.Com, B.Sc., and other graduates building practical skills." },
-  { icon: "💼", title: "Freshers & Job Seekers", desc: "Stand out with real analytics projects and tool fluency." },
-  { icon: "👔", title: "Working Professionals", desc: "Add practical analytics skills alongside your current role." },
+  { icon: "🎓", title: "MBA Students & Graduates", desc: "Every specialization — finance, marketing, HR, operations, and more." },
+  { icon: "📘", title: "BBA Students & Graduates", desc: "Build practical, corporate-ready skills alongside your degree." },
+  { icon: "🧑‍🎓", title: "Other Streams", desc: "B.Com, B.Sc., and other graduates aiming for a corporate career." },
+  { icon: "💼", title: "Freshers & Recent Graduates", desc: "Stand out with real project experience and tool fluency." },
+  { icon: "👔", title: "Early-Career Professionals", desc: "Sharpen practical workplace skills alongside your current role." },
 ];
 
-const HERO_HIGHLIGHT_PHRASE = "Job-Ready Data Analyst";
+const outcomes = [
+  { icon: "🛠️", title: "Practical Skills", desc: "Build confidence using relevant business, analytics, and automation tools through hands-on practice." },
+  { icon: "📁", title: "Project Experience", desc: "Create demonstrable work from real-world scenarios that can support your professional portfolio." },
+  { icon: "🎤", title: "Interview Readiness", desc: "Prepare to explain your skills, projects, and problem-solving approach with confidence." },
+  { icon: "🏢", title: "Corporate Insights", desc: "Learn professional expectations and workplace practices directly from industry experts." },
+];
 
-/** Wraps the "Job-Ready Data Analyst" phrase in the hero title with the animated gradient style, if present. */
+const HERO_HIGHLIGHT_PHRASE = "Job-Ready Skills";
+
+/** Wraps the "Job-Ready Skills" phrase in the hero title with the animated gradient style, if present. */
 function renderHeroTitle(title: string) {
   const index = title.toLowerCase().indexOf(HERO_HIGHLIGHT_PHRASE.toLowerCase());
   if (index === -1) return title;
@@ -76,10 +95,10 @@ export default async function HomePage() {
             <div>
               <div className="mb-3 flex flex-wrap gap-2">
                 <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-bold backdrop-blur-sm">
-                  📅 {settings.durationLabel} Program
+                  📅 {settings.durationLabel} Career Program
                 </span>
                 <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-bold backdrop-blur-sm">
-                  🎓 {settings.totalSessions} Sessions
+                  🎓 {settings.totalSessions} Practical Sessions
                 </span>
                 <span className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-bold backdrop-blur-sm">
                   🛡️ {settings.refundWindowDays}-Day Money-Back Guarantee
@@ -127,11 +146,11 @@ export default async function HomePage() {
       {/* WHO SHOULD JOIN */}
       <Section>
         <SectionHeading
-          eyebrow="Who Should Join"
+          eyebrow="Who Is This Program For?"
           title="Built for Every Background"
-          description="No prior analytics experience required — the program meets you where you are."
+          description="No prior analytics experience required. Practical reporting, analysis, automation, and project work are useful across business functions — the program meets you where you are."
         />
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {audiences.map((a, i) => (
             <ScrollReveal key={a.title} delayMs={i * 80}>
               <div className="h-full rounded-2xl bg-gradient-to-br from-navy-800 to-navy-900 p-6 text-white shadow-lg transition-transform hover:-translate-y-1">
@@ -148,15 +167,44 @@ export default async function HomePage() {
       <Section className="bg-slate-50">
         <SectionHeading
           eyebrow="Curriculum"
-          title="Explore the Curriculum"
-          description={`${settings.totalSessions} sessions across 7 modules — ${settings.coreClasses} core classes plus ${settings.mentorSessions} corporate expert mentoring sessions — ${settings.totalHours} instructional hours in total.`}
+          title="Practical Skills Employers Value"
+          description="Build a foundation in business reporting, data-driven decision-making, workplace automation, and practical problem-solving."
         />
+        <p className="mx-auto -mt-6 mb-8 max-w-2xl text-center text-sm text-slate-500">
+          {settings.totalSessions} sessions across 7 modules — {settings.coreClasses} core classes plus{" "}
+          {settings.mentorSessions} corporate expert mentoring sessions — {settings.totalHours} instructional hours
+          in total.
+        </p>
         <CurriculumModuleGrid curriculum={curriculum} />
         <div className="mt-8 text-center">
           <ButtonLink href="/curriculum" variant="secondary">
             View Full Curriculum →
           </ButtonLink>
         </div>
+      </Section>
+
+      {/* CAREER OUTCOMES */}
+      <Section>
+        <SectionHeading
+          eyebrow="Career Preparation"
+          title="Prepare for the Corporate World"
+          description="What this placement-oriented program is designed to build."
+        />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {outcomes.map((o, i) => (
+            <ScrollReveal key={o.title} delayMs={i * 80}>
+              <div className="h-full rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                <span className="mb-3 block text-3xl">{o.icon}</span>
+                <h3 className="mb-1 text-base font-bold text-navy-900">{o.title}</h3>
+                <p className="text-sm text-slate-600">{o.desc}</p>
+              </div>
+            </ScrollReveal>
+          ))}
+        </div>
+        <p className="mx-auto mt-6 max-w-2xl text-center text-xs text-slate-500">
+          Individual outcomes depend on learner effort, background, performance, and the job market. This program
+          does not promise guaranteed placement, a guaranteed salary, or a job offer.
+        </p>
       </Section>
 
       {/* TRAINERS & MENTORS */}
@@ -202,8 +250,8 @@ export default async function HomePage() {
       <Section>
         <SectionHeading
           eyebrow="Career Paths"
-          title="Relevant Across Specializations"
-          description="See how analytics applies to your specific MBA specialization or background."
+          title="Skills Relevant Across Specializations"
+          description="How the program's practical skills can support different business functions and specializations."
         />
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {careerPaths.map((c) => (
@@ -214,6 +262,10 @@ export default async function HomePage() {
             </div>
           ))}
         </div>
+        <p className="mx-auto mt-6 max-w-2xl text-center text-xs text-slate-500">
+          These are examples of how the program&apos;s skills can be relevant, not a guarantee of eligibility,
+          interview calls, or placement in any specific role.
+        </p>
         <div className="mt-8 text-center">
           <ButtonLink href="/career-guidance" variant="secondary">
             Explore Career Guidance →

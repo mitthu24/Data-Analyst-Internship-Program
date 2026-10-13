@@ -5,7 +5,7 @@ import { getSettings, formatInr } from "@/lib/content/settings";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Get in touch about the Data Analyst Internship Program.",
+  description: "Get in touch about the Skillo Academy Placement-Oriented Internship Program.",
 };
 
 export default async function ContactPage() {

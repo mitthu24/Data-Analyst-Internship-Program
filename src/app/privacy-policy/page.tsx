@@ -3,7 +3,7 @@ import { Section } from "@/components/Section";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "Privacy information for the Data Analyst Internship Program website.",
+  description: "Privacy information for the Skillo Academy Placement-Oriented Internship Program website.",
 };
 
 export default function PrivacyPolicyPage() {
@@ -18,7 +18,7 @@ export default function PrivacyPolicyPage() {
       <Section>
         <div className="mx-auto max-w-3xl space-y-6 text-slate-700 leading-relaxed">
           <p>
-            This Privacy Policy explains how the Data Analyst Internship Program (&ldquo;we&rdquo;, &ldquo;us&rdquo;)
+            This Privacy Policy explains how the Skillo Academy Placement-Oriented Internship Program (&ldquo;we&rdquo;, &ldquo;us&rdquo;)
             collects, uses, and protects information submitted through this website.
           </p>
 

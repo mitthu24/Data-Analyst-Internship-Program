@@ -5,7 +5,7 @@ import { getFaqs } from "@/lib/content/faq";
 
 export const metadata: Metadata = {
   title: "FAQ",
-  description: "Frequently asked questions about the Data Analyst Internship Program.",
+  description: "Frequently asked questions about the Skillo Academy Placement-Oriented Internship Program.",
 };
 
 export default async function FaqPage() {

@@ -6,7 +6,7 @@ import { getCurriculum } from "@/lib/content/curriculum";
 
 export const metadata: Metadata = {
   title: "Curriculum",
-  description: "The full 25-session Data Analyst Internship Program curriculum.",
+  description: "The full 25-session Skillo Academy Placement-Oriented Internship Program curriculum.",
 };
 
 export default async function CurriculumPage() {

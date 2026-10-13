@@ -5,7 +5,7 @@ import { getProjects } from "@/lib/content/projects";
 
 export const metadata: Metadata = {
   title: "Practical Projects",
-  description: "The practical project portfolio built during the Data Analyst Internship Program.",
+  description: "The practical project portfolio built during the Skillo Academy Placement-Oriented Internship Program.",
 };
 
 export default async function ProjectsPage() {

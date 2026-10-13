@@ -15,11 +15,11 @@ export const heroContentSchema = z.object({
 });
 export type HeroContent = z.infer<typeof heroContentSchema>;
 export const defaultHeroContent: HeroContent = {
-  title: "Become a Job-Ready Data Analyst in 8 Practical Weeks",
+  title: "Build Job-Ready Skills. Prepare for Your Next Career Opportunity.",
   description:
-    "Master Advanced Excel, Power BI, SQL, automation, and AI-assisted dashboards through 25 hands-on sessions built around real corporate scenarios — for MBA students, graduates, freshers, and working professionals.",
-  ctaLabel: "Enroll Now — Pay ₹499",
-  secondaryCtaLabel: "View Full Curriculum",
+    "Move beyond theory. Build practical corporate skills, work on real-world projects, learn from industry professionals, and prepare for interviews through an intensive 8-week learning experience.",
+  ctaLabel: "Start Your Career Journey",
+  secondaryCtaLabel: "Explore the Program",
 };
 
 export const aboutContentSchema = z.object({
@@ -28,7 +28,7 @@ export const aboutContentSchema = z.object({
 export type AboutContent = z.infer<typeof aboutContentSchema>;
 export const defaultAboutContent: AboutContent = {
   intro:
-    "The Data Analyst Internship Program is designed for MBA students from every specialization, BBA, B.Com, B.Sc. and other graduates, freshers, job seekers, and working professionals who want practical, job-relevant analytics skills without a multi-month commitment.",
+    "Skillo Academy's Placement-Oriented Internship Program is a practical, career-preparation program designed for MBA and BBA students and graduates, students from other degree programs who want corporate careers, freshers preparing for entry-level roles, and early-career professionals who want to sharpen workplace skills — without a multi-month commitment.",
 };
 
 export const careerGuidanceContentSchema = z.object({
@@ -37,7 +37,7 @@ export const careerGuidanceContentSchema = z.object({
 export type CareerGuidanceContent = z.infer<typeof careerGuidanceContentSchema>;
 export const defaultCareerGuidanceContent: CareerGuidanceContent = {
   intro:
-    "Career paths across specializations, and the corporate readiness skills covered in the program. We describe realistic career directions only — we do not promise employment or any specific salary.",
+    "Resume preparation, project presentation, interview practice, and the corporate readiness skills covered in the program — described honestly, as placement-oriented preparation. This program does not promise guaranteed placement, a guaranteed salary, or a job offer.",
 };
 
 export const footerContentSchema = z.object({
@@ -45,7 +45,7 @@ export const footerContentSchema = z.object({
 });
 export type FooterContent = z.infer<typeof footerContentSchema>;
 export const defaultFooterContent: FooterContent = {
-  text: "An 8-week, practical analytics internship covering Excel, Power BI, SQL, automation, and AI-assisted dashboards for MBA students, graduates, freshers, and working professionals.",
+  text: "An 8-week, placement-oriented internship program building practical corporate skills — Excel, Power BI, SQL, automation, and AI-assisted dashboards — for MBA/BBA students, other graduates, freshers, and early-career professionals.",
 };
 
 export const announcementBannerSchema = z.object({

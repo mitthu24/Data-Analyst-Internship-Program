@@ -12,14 +12,30 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com";
 
+const defaultTitle = "Skillo Academy — Placement-Oriented Internship Program";
+const defaultDescription =
+  "Skillo Academy's 8-week, placement-oriented internship program: build job-ready skills, work on real-world projects, and prepare for interviews. Practical training in Excel, Power BI, SQL, automation, and AI-assisted dashboards for MBA/BBA students, freshers, and early-career professionals. 25 sessions, 37.5 instructional hours.";
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Skillo — Data Analyst Internship Program",
-    template: "%s · Skillo",
+    default: defaultTitle,
+    template: "%s · Skillo Academy",
   },
-  description:
-    "Skillo's 8-week, practical Data Analyst Internship Program covering Advanced Excel, Power BI, SQL, automation, and AI-assisted dashboards. 25 sessions, 37.5 instructional hours.",
+  description: defaultDescription,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: "Skillo Academy",
+    title: defaultTitle,
+    description: defaultDescription,
+    url: siteUrl,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: defaultTitle,
+    description: defaultDescription,
+  },
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
